@@ -1,0 +1,35 @@
+﻿@inherits DraggableComponent
+@inject ILogger<XrpPicture> logger;
+@using Microsoft.Extensions.Logging;
+@using ReportEditor.Models;
+@using static ReportEditor.Models.DraggableComponentModel
+
+
+<img id="@Model.ID" src="@ExtendedModel.ImagePath" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+     @ondragenter="OnDragEnter" 
+     @ondragenter:stopPropagation 
+     @ondragleave="OnDragLeave" 
+     @ondragleave:stopPropagation
+     @ondragstart="OnDragStart" 
+     @ondragstart:stopPropagation
+     @onmouseover="OnMouseOver"
+     @onclick="OnClick"
+     @onclick:stopPropagation
+     @onmousedown="OnMouseDown" 
+     @onmousedown:stopPropagation
+     @onmouseup="OnMouseUp"
+     @onmouseup:stopPropagation/>
+
+
+@code {
+
+    public PictureComponentModel ExtendedModel;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ExtendedModel = Model as PictureComponentModel;
+    }
+
+
+}

@@ -1,0 +1,33 @@
+﻿@using static ReportEditor.Models.DraggableComponentModel
+
+
+    <div style="width:100%">
+
+        @foreach (var item in Items)
+        {
+            <ToolBoxItem Model="@item" />
+        }
+
+    </div>
+
+@code {
+
+    List<DraggableComponentModel> Items = GetInitList();
+
+    private static List<DraggableComponentModel> GetInitList()
+    {
+        DraggableComponentModelFactory factory = new DraggableComponentModelFactory();
+        List<DraggableComponentModel> list = new List<DraggableComponentModel>();
+        list.Add(factory.Create("textblock", DraggableComponentModelType.TextBlock, 30, 150, DraggableComponentModel.DraggableComponentLayoutMode.Absolute));
+        list.Add(factory.Create("table", DraggableComponentModelType.Table, 200, 400, DraggableComponentModel.DraggableComponentLayoutMode.Absolute));
+        list.Add(factory.Create("picture", DraggableComponentModelType.Picture, 200, 200, DraggableComponentModel.DraggableComponentLayoutMode.Absolute));
+        list.Add(factory.Create("group", DraggableComponentModelType.Container, 400, 700, DraggableComponentModel.DraggableComponentLayoutMode.Absolute));
+        list.Add(factory.Create("textblock(stack)", DraggableComponentModelType.TextBlock, 30, 150, DraggableComponentModel.DraggableComponentLayoutMode.Stack));
+        list.Add(factory.Create("table(stack)", DraggableComponentModelType.Table, 100, 200, DraggableComponentModel.DraggableComponentLayoutMode.Stack));
+        list.Add(factory.Create("picture(stack)", DraggableComponentModelType.Picture, 200, 200, DraggableComponentModel.DraggableComponentLayoutMode.Stack));
+
+        return list;
+    }
+
+
+}

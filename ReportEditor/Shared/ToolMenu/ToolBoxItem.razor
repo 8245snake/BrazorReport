@@ -1,0 +1,28 @@
+﻿@inherits DraggableComponent
+
+
+
+    <div class="@StyleClass" draggable="true"
+         @ondragstart="OnDragStart" >
+        @Model.Text
+    </div>
+
+
+@code
+{
+
+
+    public override string StyleClass
+    {
+        get
+        {
+            string cls = "tool-row ";
+            return cls;
+        }
+    }
+
+}
+
+
+
+

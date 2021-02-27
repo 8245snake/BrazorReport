@@ -1,0 +1,34 @@
+﻿@inherits DraggableComponent
+@inject ILogger<XrpTextBlock> logger;
+@using Microsoft.Extensions.Logging;
+@using static ReportEditor.Models.DraggableComponentModel
+
+
+    <div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+         @ondragenter="OnDragEnter"
+         @ondragenter:stopPropagation
+         @ondragleave="OnDragLeave"
+         @ondragleave:stopPropagation
+         @ondragstart="OnDragStart"
+         @ondragstart:stopPropagation
+         @onmouseover="OnMouseOver"
+         @onclick="OnClick"
+         @onclick:stopPropagation
+         @onmousedown="OnMouseDown"
+         @onmousedown:stopPropagation
+         @onmouseup="OnMouseUp"
+         @onmouseup:stopPropagation>
+        @Model.Text
+    </div>
+
+@code {
+
+    private TextComponentModel ExtendedModel;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ExtendedModel = Model as TextComponentModel;
+    }
+
+}

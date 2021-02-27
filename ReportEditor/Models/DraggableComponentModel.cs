@@ -1,0 +1,160 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Drawing;
+
+namespace ReportEditor.Models
+{
+    [Serializable]
+    public class DraggableComponentModel
+    {
+        public event ModelPropertyChangedEventHandler PropertyChanged;
+        public delegate void ModelPropertyChangedEventHandler(DraggableComponentModel model);
+
+        private static int ComponentIdNumber = 0;
+
+        public enum DraggableComponentModelType : int
+        {
+            TextBlock,
+            Table,
+            Picture,
+            Container,
+        }
+
+        public enum DraggableComponentLayoutMode : int
+        {
+            Absolute,
+            Relative,
+            Stack,
+        }
+
+        public string ID { get; set; }
+        public string Text { get; set; }
+
+        public DraggableComponentModelType ModelType { get; set; }
+        public DraggableComponentLayoutMode LayoutMode { get; set; }
+
+
+        public Rectangle ComponentRect;
+
+
+        private bool _IsHighLighting;
+
+        public bool IsHighLighting
+        {
+            get => _IsHighLighting;
+            set
+            {
+                if(_IsHighLighting != value)
+                {
+                    _IsHighLighting = value;
+                    OnPropertyChanged(new EventArgs());
+                }
+
+            }
+        }
+
+
+        private bool _IsGrabbing;
+
+        public bool IsGrabbing
+        {
+            get => _IsGrabbing;
+            set
+            {
+                if (_IsGrabbing != value)
+                {
+                    _IsGrabbing = value;
+                    OnPropertyChanged(new EventArgs());
+                }
+            }
+        }
+
+        public double GrabbingShiftX { get; set; }
+        public double GrabbingShiftY { get; set; }
+
+        protected virtual void OnPropertyChanged(EventArgs e)
+        {
+            PropertyChanged?.Invoke(this);
+        }
+
+        public DraggableComponentModel()
+        {
+            Text = "unknown";
+            ModelType = DraggableComponentModelType.TextBlock;
+            LayoutMode = DraggableComponentLayoutMode.Stack;
+            ComponentRect.Height = 50;
+            ComponentRect.Width = 100;
+            ID = $"component{ComponentIdNumber}-{ModelType.Name()}";
+            ComponentIdNumber++;
+        }
+
+        public DraggableComponentModel(string text, DraggableComponentModelType type, int defaultHeight, int defaultWidth, DraggableComponentLayoutMode layout)
+        {
+            Text = text;
+            ModelType = type;
+            LayoutMode = layout;
+            ComponentRect.Height = defaultHeight;
+            ComponentRect.Width = defaultWidth;
+            ID = $"component{ComponentIdNumber}-{ModelType.Name()}";
+            ComponentIdNumber++;
+        }
+
+        public void SetRect(int x, int y, int height, int width)
+        {
+            ComponentRect.X = x;
+            ComponentRect.Y = y;
+            ComponentRect.Height = height;
+            ComponentRect.Width = width;
+            OnPropertyChanged(new EventArgs());
+        }
+
+        public void SetLocation(int x, int y)
+        {
+            int oldX = ComponentRect.X;
+            ComponentRect.X = x;
+
+            int oldY = ComponentRect.Y;
+            ComponentRect.Y = y;
+
+            if (oldX != x || oldY != y)
+            {
+                OnPropertyChanged(new EventArgs());
+            }
+        }
+
+        public void SetSize(int height, int width)
+        {
+            int oldHeight = ComponentRect.Height;
+            ComponentRect.Height = height;
+
+            int oldWidth = ComponentRect.Width;
+            ComponentRect.Width = width;
+
+            if (oldHeight != height || oldWidth != width)
+            {
+                OnPropertyChanged(new EventArgs());
+            }
+        }
+
+        public string GetRectStyle()
+        {
+            int x = ComponentRect.X;
+            int y = ComponentRect.Y;
+            int height = ComponentRect.Height;
+            int width = ComponentRect.Width;
+            return $"height:{height}px; width:{width}px; left:{x}px; top:{y}px;";
+        }
+
+
+        public DraggableComponentModel Clone()
+        {
+            var clone = (DraggableComponentModel)this.MemberwiseClone();
+            clone.ID = $"component{ComponentIdNumber}-{clone.ModelType.Name()}";
+            ComponentIdNumber++;
+            return clone;
+        }
+    }
+
+}

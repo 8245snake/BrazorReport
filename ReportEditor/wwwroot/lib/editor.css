@@ -1,0 +1,28 @@
+﻿
+
+.textblock {
+    background-color: #f0f0f0;
+    cursor: grab;
+}
+
+.table {
+    cursor: grab;
+}
+
+.picture {
+    cursor: grab;
+}
+
+.group {
+    cursor: grab;
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+.highlight {
+    border: dashed 2px black;
+}
+
+.grabbing {
+    cursor: grabbing;
+}

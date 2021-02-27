@@ -1,0 +1,94 @@
+﻿@inherits DraggableComponent
+@inject DragAndDropService _DragAndDropService
+@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+@inject ILogger<DroppableContainer> logger;
+@using Microsoft.Extensions.Logging;
+@using ReportEditor.Models
+
+
+<div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+     @ondragenter="OnDragEnter"
+     @ondragenter:stopPropagation
+     @ondragleave="OnDragLeave" 
+     @ondragleave:stopPropagation
+     @ondragstart="OnDragStart" 
+     @ondragstart:stopPropagation
+     @onmouseover="OnMouseOver"
+     @onmousemove="OnMouseMove"
+     @onclick="OnClick" 
+     @onmousedown="OnMouseDown"
+     @onmousedown:stopPropagation
+     @onmouseup="OnMouseUp" 
+     @onmouseup:stopPropagation
+     @ondrop="OnDrop"
+     @ondrop:stopPropagation>
+    @foreach (var item in ExtendedModel.Models)
+    {
+        <DraggableComponent Model="@item" />
+    }
+</div>
+
+@code {
+
+    public ContainerComponentModel ExtendedModel;
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ExtendedModel = Model as ContainerComponentModel;
+
+        try
+        {
+            _HighLightingService.HighLightChanged += OnHighLightChanged;
+            _Service.ModelPropertyChanged += OnModelPropertyChanged;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception.Message);
+        }
+
+    }
+
+    private void OnHighLightChanged(object sender, EventArgs e)
+    {
+        // ハイライト状態を更新
+        foreach (var model in ExtendedModel.Models)
+        {
+            model.IsHighLighting = model.ID == _HighLightingService.HighLightingID;
+        }
+    }
+
+    private void OnModelPropertyChanged(string sheetID, DraggableComponentModel model)
+    {
+        // モデルに変更があればビューを更新
+        StateHasChanged();
+    }
+
+    protected void OnDrop(DragEventArgs e)
+    {
+        //logger.LogInformation(this.GetType().Name + "_OnDrop");
+
+        DraggableComponentModel model = _DragAndDropService.DataSource as DraggableComponentModel;
+        if (model == null)
+        {
+            // ツールボックスからドロップされたとき
+            model = _DragAndDropService.Data as DraggableComponentModel;
+            if (model == null) { return; }
+        }
+
+        ExtendedModel.Models.Add(model);
+        StateHasChanged();
+
+        _DragAndDropService.Data = null;
+        _DragAndDropService.DataSource = null;
+    }
+
+    protected void OnMouseMove(MouseEventArgs e)
+    {
+
+    }
+
+
+}

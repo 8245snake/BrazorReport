@@ -1,0 +1,94 @@
+﻿@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+
+<div>
+    <input id="button-debug" type="button" value="デバッグ用" onclick="onDebugButtonClick()" />
+
+    <table>
+        <tr>
+            <td>X</td>
+            <td><input type="text" @bind="X" /></td>
+        </tr>
+        <tr>
+            <td>Y</td>
+            <td><input type="text" @bind="Y" /></td>
+        </tr>
+        <tr>
+            <td>Height</td>
+            <td><input type="text" @bind="Height" /></td>
+        </tr>
+        <tr>
+            <td>Width</td>
+            <td><input type="text" @bind="Width" /></td>
+        </tr>
+    </table>
+
+</div>
+
+@code {
+
+    private DraggableComponentModel Model = new DraggableComponentModel();
+
+
+    private string TargetID { get => _HighLightingService.HighLightingID; }
+
+
+    private int X
+    {
+        get => Model.ComponentRect.X;
+        set
+        {
+            Model.SetLocation(value, Model.ComponentRect.Y);
+        }
+    }
+
+    private int Y
+    {
+        get => Model.ComponentRect.Y;
+        set
+        {
+            Model.SetLocation(Model.ComponentRect.X, value);
+        }
+    }
+
+    private int Height
+    {
+        get => Model.ComponentRect.Height;
+        set
+        {
+            Model.SetSize(value, Model.ComponentRect.Width);
+        }
+    }
+
+    private int Width
+    {
+        get => Model.ComponentRect.Width;
+        set
+        {
+            Model.SetSize(Model.ComponentRect.Height, value);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _HighLightingService.HighLightChanged += HighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
+    }
+
+    private void OnModelPropertyChanged(string id, DraggableComponentModel model)
+    {
+        StateHasChanged();
+    }
+
+    private void HighLightChanged(object sender, EventArgs e)
+    {
+        var model = _Service.Find(_HighLightingService.HighLightingID);
+        if(model == null)
+        {
+            return;
+        }
+        Model = model;
+        StateHasChanged();
+    }
+
+}
