@@ -24,9 +24,9 @@ namespace ReportEditor.Services
 
         public DraggableComponentModelList this[string sheetID]
         {
-            get => _ModelLists.Where(list => list.SheetID == sheetID).FirstOrDefault();
+            get => _ModelLists.Where(list => list.ContainerID == sheetID).FirstOrDefault();
             set {
-                var list = _ModelLists.Where(list => list.SheetID == sheetID).FirstOrDefault();
+                var list = _ModelLists.Where(list => list.ContainerID == sheetID).FirstOrDefault();
                 if (list != null)
                 {
                     Remove(list);
@@ -62,6 +62,13 @@ namespace ReportEditor.Services
 
         private bool Find(string id, out DraggableComponentModel item, out DraggableComponentModelList parent)
         {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                item = null;
+                parent = null;
+                return false;
+            }
+
             foreach (var list in _ModelLists)
             {
                 foreach (var model in list)
@@ -108,7 +115,7 @@ namespace ReportEditor.Services
         {
             if (list != null)
             {
-                OnModelPropertyChanged(list.SheetID, item);
+                OnModelPropertyChanged(list.ContainerID, item);
             }
         }
     }

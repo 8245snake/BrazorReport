@@ -25,4 +25,5 @@
 
 .grabbing {
     cursor: grabbing;
+    z-index: 999;
 }

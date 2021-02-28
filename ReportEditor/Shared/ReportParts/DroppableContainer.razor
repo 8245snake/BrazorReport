@@ -2,24 +2,28 @@
 @inject DragAndDropService _DragAndDropService
 @inject HighLightingService _HighLightingService
 @inject ReportComponentService _Service
+@inject IJSRuntime JS
 @inject ILogger<DroppableContainer> logger;
 @using Microsoft.Extensions.Logging;
 @using ReportEditor.Models
+@using static ReportEditor.Models.DraggableComponentModel
 
 
 <div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
      @ondragenter="OnDragEnter"
      @ondragenter:stopPropagation
-     @ondragleave="OnDragLeave" 
+     @ondragleave="OnDragLeave"
      @ondragleave:stopPropagation
-     @ondragstart="OnDragStart" 
+     @ondragstart="OnDragStart"
      @ondragstart:stopPropagation
+     @ondragover="OnDragOver"
+     @ondragover:preventDefault
      @onmouseover="OnMouseOver"
      @onmousemove="OnMouseMove"
-     @onclick="OnClick" 
+     @onclick="OnClick"
      @onmousedown="OnMouseDown"
      @onmousedown:stopPropagation
-     @onmouseup="OnMouseUp" 
+     @onmouseup="OnMouseUp"
      @onmouseup:stopPropagation
      @ondrop="OnDrop"
      @ondrop:stopPropagation>
@@ -32,23 +36,33 @@
 @code {
 
     public ContainerComponentModel ExtendedModel;
+    private ComponentInfo[] Components = new ComponentInfo[] { };
 
+    private double OffsetX { get => (Components.Length > 0) ? Components[0].X : 0; }
+    private double OffsetY { get => (Components.Length > 0) ? Components[0].Y : 0; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
+
+        if (Model == null)
+        {
+            DraggableComponentModelFactory factory = new DraggableComponentModelFactory();
+            Model = factory.Create("container", DraggableComponentModelType.Container, 0, 0, DraggableComponentLayoutMode.Relative);
+        }
+
         ExtendedModel = Model as ContainerComponentModel;
+        ExtendedModel.Models.ContainerID = Model.ID;
+        _Service.Add(ExtendedModel.Models);
+        _HighLightingService.HighLightChanged += OnHighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
 
-        try
-        {
-            _HighLightingService.HighLightChanged += OnHighLightChanged;
-            _Service.ModelPropertyChanged += OnModelPropertyChanged;
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception.Message);
-        }
+    }
 
+    private void OnModelPropertyChanged(string sheetID, DraggableComponentModel model)
+    {
+        // モデルに変更があればビューを更新
+        StateHasChanged();
     }
 
     private void OnHighLightChanged(object sender, EventArgs e)
@@ -60,17 +74,16 @@
         }
     }
 
-    private void OnModelPropertyChanged(string sheetID, DraggableComponentModel model)
-    {
-        // モデルに変更があればビューを更新
-        StateHasChanged();
-    }
 
-    protected void OnDrop(DragEventArgs e)
+    protected async void OnDrop(DragEventArgs e)
     {
-        //logger.LogInformation(this.GetType().Name + "_OnDrop");
+        logger.LogInformation("drop");
 
-        DraggableComponentModel model = _DragAndDropService.DataSource as DraggableComponentModel;
+        await getComponents();
+
+        // ドロップ元の参照を探す
+        DraggableComponentModel source = _DragAndDropService.DataSource as DraggableComponentModel;
+        DraggableComponentModel model = _Service.Find(source?.ID);
         if (model == null)
         {
             // ツールボックスからドロップされたとき
@@ -86,14 +99,116 @@
         ExtendedModel.Models.Add(model);
         StateHasChanged();
 
+        _HighLightingService.HighLightingID = model.ID;
+
+        switch (model.LayoutMode)
+        {
+            case DraggableComponentLayoutMode.Absolute:
+                PutComponentAbsolute(model, e);
+                break;
+            case DraggableComponentLayoutMode.Relative:
+                break;
+            case DraggableComponentLayoutMode.Stack:
+                PutComponentStack(model, e);
+                break;
+            default:
+                break;
+        }
+
         _DragAndDropService.Data = null;
         _DragAndDropService.DataSource = null;
     }
 
     protected void OnMouseMove(MouseEventArgs e)
     {
+        //logger.LogInformation(this.GetType().Name + "_move");
+        DraggableComponentModel model = _DragAndDropService.Data as DraggableComponentModel;
+        if (model?.IsGrabbing != true) { return; }
+
+        switch (model.LayoutMode)
+        {
+            case DraggableComponentLayoutMode.Absolute:
+                PutComponentAbsolute(model, e);
+                break;
+            case DraggableComponentLayoutMode.Relative:
+                break;
+            case DraggableComponentLayoutMode.Stack:
+                PutComponentStack(model, e);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /// <summary>
+    /// 指定したシートに乗っているDOMを取得する
+    /// </summary>
+    private async Task getComponents()
+    {
+        logger.LogInformation("getComponents");
+        var components = await JS.InvokeAsync<ComponentInfo[]>("getComponents", ExtendedModel.Models.ContainerID);
+        Components = components;
+        // モデルに展開
+
+        foreach (var component in Components)
+        {
+            int x = (int)(component.X - OffsetX);
+            int y = (int)(component.Y - OffsetY);
+            int h = (int)(component.Height);
+            int w = (int)(component.Width);
+
+            ExtendedModel.Models.Where(item => item.ID == component.ID)
+            .FirstOrDefault()?.SetRect(x, y, h, w);
+        }
 
     }
 
+    /// <summary>
+    /// 絶対座標で指定する
+    /// </summary>
+    private void PutComponentAbsolute(DraggableComponentModel item, MouseEventArgs e)
+    {
+        var shiftX = (item.IsGrabbing) ? item.GrabbingShiftX - OffsetX : 0.0;
+        var shiftY = (item.IsGrabbing) ? item.GrabbingShiftY - OffsetY : 0.0;
+
+        int x = (int)(e.ClientX - OffsetX - shiftX);
+        int y = (int)(e.ClientY - OffsetY - shiftY);
+
+        item.SetLocation(x, y);
+    }
+
+    private void PutComponentStack(DraggableComponentModel item, MouseEventArgs e)
+    {
+
+        ExtendedModel.Models.Remove(item);
+        //int x = (int)(e.ClientX - OffsetX);
+        int y = (int)(e.ClientY - OffsetY);
+
+        // stackタイプのコンポーネントの丁度いい位置に差し込む
+        foreach (var stackModel in ExtendedModel.Models.Where(model => model.LayoutMode == DraggableComponentLayoutMode.Stack))
+        {
+            int top = stackModel.ComponentRect.Top;
+            int bottom = stackModel.ComponentRect.Bottom;
+            if (top <= y && bottom >= y)
+            {
+                int index = ExtendedModel.Models.IndexOf(stackModel);
+                ExtendedModel.Models.Insert(index, item);
+                break;
+            }
+        }
+
+        // 一番うしろに追加
+        if (!ExtendedModel.Models.Contains(item))
+        {
+            ExtendedModel.Models.Add(item);
+        }
+
+    }
+
+    protected void OnDragOver(DragEventArgs e)
+    {
+        //getComponents();
+    }
 
 }

@@ -25,6 +25,9 @@ window.getComponentInfo = (id) => {
 window.getComponents = (sheetID) => {
 
     var sheet = document.getElementById(sheetID);
+    if (sheet == null) {
+        return null;
+    }
     var elements = Array.from(sheet.children);
     var components = [];
     // 1つ目にシートを入れておく

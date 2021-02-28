@@ -8,10 +8,10 @@ namespace ReportEditor.Models
 {
     public class DraggableComponentModelList : IList<DraggableComponentModel>
     {
-        private static int SheetIdNumber = 0;
+        private static int ContainerIdNumber = 0;
         private List<DraggableComponentModel> Items = new List<DraggableComponentModel>();
 
-        public string SheetID { get; set; }
+        public string ContainerID { get; set; }
 
         public event ItemPropertyChangedEventHandler ItemPropertyChanged;
         public delegate void ItemPropertyChangedEventHandler(DraggableComponentModelList list, DraggableComponentModel item);
@@ -93,8 +93,8 @@ namespace ReportEditor.Models
 
         public DraggableComponentModelList()
         {
-            SheetIdNumber++;
-            SheetID = $"sheet-{SheetIdNumber}";
+            ContainerIdNumber++;
+            ContainerID = $"sheet-{ContainerIdNumber}";
         }
 
         public void AddRange(IEnumerable<DraggableComponentModel> items)
