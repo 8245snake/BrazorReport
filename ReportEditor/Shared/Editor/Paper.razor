@@ -127,9 +127,11 @@
         {
             int x = (int)(component.X - OffsetX);
             int y = (int)(component.Y - OffsetY);
+            int h = (int)(component.Height);
+            int w = (int)(component.Width);
 
             Items.Where(item => item.ID == component.ID)
-                .FirstOrDefault()?.SetLocation(x, y);
+                .FirstOrDefault()?.SetRect(x, y, h, w);
         }
 
     }

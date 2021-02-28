@@ -49,29 +49,59 @@ namespace ReportEditor.Services
 
         public DraggableComponentModel Find(string id)
         {
+
+            DraggableComponentModel item;
+            DraggableComponentModelList parent;
+
+            if (Find(id, out item, out parent))
+            {
+                return item;
+            }
+            return null;
+        }
+
+        private bool Find(string id, out DraggableComponentModel item, out DraggableComponentModelList parent)
+        {
             foreach (var list in _ModelLists)
             {
                 foreach (var model in list)
                 {
                     if (model.ID == id)
                     {
-                        return model;
+                        item = model;
+                        parent = list;
+                        return true;
                     }
                     ContainerComponentModel container = model as ContainerComponentModel;
                     if (container != null)
                     {
-                        foreach (var item in container.Children())
+                        foreach (var child in container.Children())
                         {
-                            if (item.ID == id)
+                            if (child.ID == id)
                             {
-                                return item;
+                                item = child;
+                                parent = container.Models;
+                                return true;
                             }
                         }
                     }
                 }
             }
 
-            return null;
+            item = null;
+            parent = null;
+            return false;
+        }
+
+        public void Remove(DraggableComponentModel model)
+        {
+            DraggableComponentModel item;
+            DraggableComponentModelList parent;
+
+            if (Find(model.ID, out item, out parent))
+            {
+                parent.Remove(item);
+            }
         }
 
         private void OnItemPropertyChanged(DraggableComponentModelList list, DraggableComponentModel item)

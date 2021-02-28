@@ -31,5 +31,16 @@ namespace ReportEditor.Models
             }
         }
 
+        public override DraggableComponentModel Clone()
+        {
+            ContainerComponentModel clone = this.MemberwiseClone() as ContainerComponentModel;
+
+            clone.Models = new DraggableComponentModelList();
+            clone.Models.AddRange(this.Models.Select(model => model.Clone()));
+            clone.ID = $"component{ComponentIdNumber}-{clone.ModelType.Name()}";
+            ComponentIdNumber++;
+            return clone;
+        }
+
     }
 }

@@ -77,6 +77,11 @@
             model = _DragAndDropService.Data as DraggableComponentModel;
             if (model == null) { return; }
         }
+        else
+        {
+            // 元の位置から消す
+            _Service.Remove(model);
+        }
 
         ExtendedModel.Models.Add(model);
         StateHasChanged();

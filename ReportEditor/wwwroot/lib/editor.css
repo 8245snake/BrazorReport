@@ -1,7 +1,7 @@
 ﻿
 
 .textblock {
-    background-color: #f0f0f0;
+    background-color: #fafafa;
     cursor: grab;
 }
 
@@ -15,7 +15,7 @@
 
 .group {
     cursor: grab;
-    background-color: #f0f0f0;
+    background-color: #fafafa;
     overflow: hidden;
 }
 

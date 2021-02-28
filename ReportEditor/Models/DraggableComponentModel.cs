@@ -12,7 +12,7 @@ namespace ReportEditor.Models
         public event ModelPropertyChangedEventHandler PropertyChanged;
         public delegate void ModelPropertyChangedEventHandler(DraggableComponentModel model);
 
-        private static int ComponentIdNumber = 0;
+        protected static int ComponentIdNumber = 0;
 
         public enum DraggableComponentModelType : int
         {
@@ -148,7 +148,7 @@ namespace ReportEditor.Models
         }
 
 
-        public DraggableComponentModel Clone()
+        public virtual DraggableComponentModel Clone()
         {
             var clone = (DraggableComponentModel)this.MemberwiseClone();
             clone.ID = $"component{ComponentIdNumber}-{clone.ModelType.Name()}";
