@@ -3,8 +3,16 @@
 
 <div>
     <input id="button-debug" type="hidden" value="デバッグ用" onclick="onDebugButtonClick()" />
-
+    
     <table>
+        <tr>
+            <td>ID</td>
+            <td><input type="text" @bind="ID" /></td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" @bind="Name" /></td>
+        </tr>
         <tr>
             <td>X</td>
             <td><input type="text" @bind="X" /></td>
@@ -32,6 +40,17 @@
 
     private string TargetID { get => _HighLightingService.HighLightingID; }
 
+    private string ID
+    {
+        get => Model.ID;
+        set => Model.ID = value;
+    }
+
+    private string Name
+    {
+        get => Model.Name;
+        set => Model.Name = value;
+    }
 
     private int X
     {

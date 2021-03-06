@@ -4,22 +4,23 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 
-    <div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
-         @ondragenter="OnDragEnter"
-         @ondragenter:stopPropagation
-         @ondragleave="OnDragLeave"
-         @ondragleave:stopPropagation
-         @ondragstart="OnDragStart"
-         @ondragstart:stopPropagation
-         @onmouseover="OnMouseOver"
-         @onclick="OnClick"
-         @onclick:stopPropagation
-         @onmousedown="OnMouseDown"
-         @onmousedown:stopPropagation
-         @onmouseup="OnMouseUp"
-         @onmouseup:stopPropagation>
-        @Model.Text
-    </div>
+<div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+     @ondragenter="OnDragEnter"
+     @ondragenter:stopPropagation
+     @ondragleave="OnDragLeave"
+     @ondragleave:stopPropagation
+     @ondragstart="OnDragStart"
+     @ondragstart:stopPropagation
+     @onmouseover="OnMouseOver"
+     @onmouseover:stopPropagation
+     @onclick="OnClick"
+     @onclick:stopPropagation
+     @onmousedown="OnMouseDown"
+     @onmousedown:stopPropagation
+     @onmouseup="OnMouseUp"
+     @onmouseup:stopPropagation>
+    @Model.Text
+</div>
 
 @code {
 

@@ -19,8 +19,11 @@
      @ondragover="OnDragOver"
      @ondragover:preventDefault
      @onmouseover="OnMouseOver"
+     @onmouseover:stopPropagation
      @onmousemove="OnMouseMove"
+     @onmousemove:stopPropagation
      @onclick="OnClick"
+     @onclick:stopPropagation
      @onmousedown="OnMouseDown"
      @onmousedown:stopPropagation
      @onmouseup="OnMouseUp"
@@ -53,7 +56,7 @@
 
         ExtendedModel = Model as ContainerComponentModel;
         ExtendedModel.Models.ContainerID = Model.ID;
-        _Service.Add(ExtendedModel.Models);
+        _Service.Add(ExtendedModel);
         _HighLightingService.HighLightChanged += OnHighLightChanged;
         _Service.ModelPropertyChanged += OnModelPropertyChanged;
 
@@ -68,6 +71,8 @@
     private void OnHighLightChanged(object sender, EventArgs e)
     {
         // ハイライト状態を更新
+        Model.IsHighLighting = Model.ID == _HighLightingService.HighLightingID;
+
         foreach (var model in ExtendedModel.Models)
         {
             model.IsHighLighting = model.ID == _HighLightingService.HighLightingID;
@@ -158,8 +163,16 @@
             int h = (int)(component.Height);
             int w = (int)(component.Width);
 
-            ExtendedModel.Models.Where(item => item.ID == component.ID)
-            .FirstOrDefault()?.SetRect(x, y, h, w);
+            if (component.ID == Model.ID)
+            {
+                Model.SetRect(x, y, h, w);
+            }
+            else
+            {
+                ExtendedModel.Models.Where(item => item.ID == component.ID)
+                .FirstOrDefault()?.SetRect(x, y, h, w);
+            }
+
         }
 
     }

@@ -4,32 +4,33 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 
-    <table id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
-           @ondragenter="OnDragEnter"
-           @ondragenter:stopPropagation
-           @ondragleave="OnDragLeave"
-           @ondragleave:stopPropagation
-           @ondragstart="OnDragStart"
-           @ondragstart:stopPropagation
-           @onmouseover="OnMouseOver"
-           @onclick="OnClick"
-           @onclick:stopPropagation
-           @onmousedown="OnMouseDown"
-           @onmousedown:stopPropagation
-           @onmouseup="OnMouseUp"
-           @onmouseup:stopPropagation>
-        @for (int row = 0; row < ExtendedModel.Rows.Count; row++)
-        {
-            <tr>
-                @for (int col = 0; col < ExtendedModel.Cols.Count; col++)
-                {
-                    <td>@row</td>
+<table id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+       @ondragenter="OnDragEnter"
+       @ondragenter:stopPropagation
+       @ondragleave="OnDragLeave"
+       @ondragleave:stopPropagation
+       @ondragstart="OnDragStart"
+       @ondragstart:stopPropagation
+       @onmouseover="OnMouseOver"
+       @onmouseover:stopPropagation
+       @onclick="OnClick"
+       @onclick:stopPropagation
+       @onmousedown="OnMouseDown"
+       @onmousedown:stopPropagation
+       @onmouseup="OnMouseUp"
+       @onmouseup:stopPropagation>
+    @for (int row = 0; row < ExtendedModel.Rows.Count; row++)
+    {
+        <tr>
+            @for (int col = 0; col < ExtendedModel.Cols.Count; col++)
+            {
+                <td>@row</td>
 
-                }
-            </tr>
-        }
+            }
+        </tr>
+    }
 
-    </table>
+</table>
 
 @code {
     public TableComponentModel ExtendedModel;

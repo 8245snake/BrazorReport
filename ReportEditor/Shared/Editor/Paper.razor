@@ -7,23 +7,26 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 <section id="@Model.ID" class="sheet padding-5mm position-relative"
-         @ondragenter="OnDragEnter"
-         @ondragenter:stopPropagation
-         @ondragleave="OnDragLeave"
-         @ondragleave:stopPropagation
-         @ondragstart="OnDragStart"
-         @ondragstart:stopPropagation
-         @ondragover="OnDragOver"
-         @ondragover:preventDefault
-         @onmouseover="OnMouseOver"
-         @onmousemove="OnMouseMove"
-         @onclick="OnClick"
-         @onmousedown="OnMouseDown"
-         @onmousedown:stopPropagation
-         @onmouseup="OnMouseUp"
-         @onmouseup:stopPropagation
-         @ondrop="OnDrop"
-         @ondrop:stopPropagation>
+     @ondragenter="OnDragEnter"
+     @ondragenter:stopPropagation
+     @ondragleave="OnDragLeave"
+     @ondragleave:stopPropagation
+     @ondragstart="OnDragStart"
+     @ondragstart:stopPropagation
+     @ondragover="OnDragOver"
+     @ondragover:preventDefault
+     @onmouseover="OnMouseOver"
+     @onmouseover:stopPropagation
+     @onmousemove="OnMouseMove"
+     @onmousemove:stopPropagation
+     @onclick="OnClick"
+     @onclick:stopPropagation
+     @onmousedown="OnMouseDown"
+     @onmousedown:stopPropagation
+     @onmouseup="OnMouseUp"
+     @onmouseup:stopPropagation
+     @ondrop="OnDrop"
+     @ondrop:stopPropagation>
     @foreach (var item in ExtendedModel.Models)
     {
         <DraggableComponent Model="@item" />

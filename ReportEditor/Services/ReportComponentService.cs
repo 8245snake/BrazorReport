@@ -9,7 +9,7 @@ namespace ReportEditor.Services
     public class ReportComponentService
     {
         // リストのリスト
-        private List<DraggableComponentModelList> _ModelLists = new List<DraggableComponentModelList>();
+        private List<ContainerComponentModel> _Papers = new List<ContainerComponentModel>();
 
         /// <summary>
         /// モデルプロパティが変化したら発火する
@@ -22,11 +22,11 @@ namespace ReportEditor.Services
             ModelPropertyChanged?.Invoke(sheetID, model);
         }
 
-        public DraggableComponentModelList this[string sheetID]
+        public ContainerComponentModel this[string sheetID]
         {
-            get => _ModelLists.Where(list => list.ContainerID == sheetID).FirstOrDefault();
+            get => _Papers.Where(paper => paper.ID == sheetID).FirstOrDefault();
             set {
-                var list = _ModelLists.Where(list => list.ContainerID == sheetID).FirstOrDefault();
+                var list = _Papers.Where(paper => paper.ID == sheetID).FirstOrDefault();
                 if (list != null)
                 {
                     Remove(list);
@@ -35,16 +35,16 @@ namespace ReportEditor.Services
             }
         }
 
-        public void Add(DraggableComponentModelList list)
+        public void Add(ContainerComponentModel paper)
         {
-            list.ItemPropertyChanged += OnItemPropertyChanged;
-            _ModelLists.Add(list);
+            paper.Models.ItemPropertyChanged += OnItemPropertyChanged;
+            _Papers.Add(paper);
         }
 
-        public void Remove(DraggableComponentModelList list)
+        public void Remove(ContainerComponentModel paper)
         {
-            list.ItemPropertyChanged -= OnItemPropertyChanged;
-            _ModelLists.Remove(list);
+            paper.Models.ItemPropertyChanged -= OnItemPropertyChanged;
+            _Papers.Remove(paper);
         }
 
         public DraggableComponentModel Find(string id)
@@ -69,14 +69,21 @@ namespace ReportEditor.Services
                 return false;
             }
 
-            foreach (var list in _ModelLists)
+            foreach (var paper in _Papers)
             {
-                foreach (var model in list)
+                if (paper.ID == id)
+                {
+                    item = paper;
+                    parent = null;
+                    return true;
+                }
+
+                foreach (var model in paper.Models)
                 {
                     if (model.ID == id)
                     {
                         item = model;
-                        parent = list;
+                        parent = paper.Models;
                         return true;
                     }
                     ContainerComponentModel container = model as ContainerComponentModel;

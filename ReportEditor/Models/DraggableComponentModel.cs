@@ -28,8 +28,30 @@ namespace ReportEditor.Models
             Relative,
             Stack,
         }
+        private string _ID;
+        public string ID
+        {
+            get => _ID;
+            set
+            {
+                _ID = value;
+                OnPropertyChanged(new EventArgs());
+            }
+        }
 
-        public string ID { get; set; }
+        private string _Name;
+
+        public string Name
+        {
+            get => _Name;
+            set
+            {
+                _Name = value;
+                OnPropertyChanged(new EventArgs());
+            }
+        }
+
+
         public string Text { get; set; }
 
         public DraggableComponentModelType ModelType { get; set; }
@@ -46,7 +68,7 @@ namespace ReportEditor.Models
             get => _IsHighLighting;
             set
             {
-                if(_IsHighLighting != value)
+                if (_IsHighLighting != value)
                 {
                     _IsHighLighting = value;
                     OnPropertyChanged(new EventArgs());
@@ -87,6 +109,7 @@ namespace ReportEditor.Models
             ComponentRect.Height = 50;
             ComponentRect.Width = 100;
             ID = $"component{ComponentIdNumber}-{ModelType.Name()}";
+            Name = ID;
             ComponentIdNumber++;
         }
 
@@ -98,6 +121,7 @@ namespace ReportEditor.Models
             ComponentRect.Height = defaultHeight;
             ComponentRect.Width = defaultWidth;
             ID = $"component{ComponentIdNumber}-{ModelType.Name()}";
+            Name = ID;
             ComponentIdNumber++;
         }
 
@@ -152,6 +176,7 @@ namespace ReportEditor.Models
         {
             var clone = (DraggableComponentModel)this.MemberwiseClone();
             clone.ID = $"component{ComponentIdNumber}-{clone.ModelType.Name()}";
+            clone.Name = clone.ID;
             ComponentIdNumber++;
             return clone;
         }

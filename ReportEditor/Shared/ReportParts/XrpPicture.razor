@@ -6,19 +6,20 @@
 
 
 <img id="@Model.ID" src="@ExtendedModel.ImagePath" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
-     @ondragenter="OnDragEnter" 
-     @ondragenter:stopPropagation 
-     @ondragleave="OnDragLeave" 
+     @ondragenter="OnDragEnter"
+     @ondragenter:stopPropagation
+     @ondragleave="OnDragLeave"
      @ondragleave:stopPropagation
-     @ondragstart="OnDragStart" 
+     @ondragstart="OnDragStart"
      @ondragstart:stopPropagation
      @onmouseover="OnMouseOver"
+     @onmouseover:stopPropagation
      @onclick="OnClick"
      @onclick:stopPropagation
-     @onmousedown="OnMouseDown" 
+     @onmousedown="OnMouseDown"
      @onmousedown:stopPropagation
      @onmouseup="OnMouseUp"
-     @onmouseup:stopPropagation/>
+     @onmouseup:stopPropagation />
 
 
 @code {
