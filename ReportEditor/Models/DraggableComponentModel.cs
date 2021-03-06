@@ -20,6 +20,7 @@ namespace ReportEditor.Models
             Table,
             Picture,
             Container,
+            Dummy,
         }
 
         public enum DraggableComponentLayoutMode : int
@@ -104,7 +105,7 @@ namespace ReportEditor.Models
         public DraggableComponentModel()
         {
             Text = "unknown";
-            ModelType = DraggableComponentModelType.TextBlock;
+            ModelType = DraggableComponentModelType.Dummy;
             LayoutMode = DraggableComponentLayoutMode.Stack;
             ComponentRect.Height = 50;
             ComponentRect.Width = 100;

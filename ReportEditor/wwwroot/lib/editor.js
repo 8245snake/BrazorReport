@@ -47,7 +47,7 @@ window.getComponents = (sheetID) => {
 // デバッグ用
 window.onDebugButtonClick = () => {
 
-    var sheetID = "sheet-1";
+    var sheetID = "omponent8-group";
     console.log(getComponents(sheetID));
 
 }

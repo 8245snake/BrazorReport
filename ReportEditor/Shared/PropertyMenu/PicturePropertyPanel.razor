@@ -1,0 +1,45 @@
+﻿@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+
+<table>
+    <tr>
+        <td>Image Path</td>
+        <td><input type="text" @bind="ImagePath" /></td>
+    </tr>
+</table>
+
+@code {
+
+    [Parameter]
+    public DraggableComponentModel Model { get; set; }
+
+    public PictureComponentModel ExtendedModel;
+
+    private string ImagePath { get => ExtendedModel.ImagePath; set => ExtendedModel.ImagePath = value; }
+
+
+    protected override void OnInitialized()
+    {
+        _HighLightingService.HighLightChanged += HighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
+        ExtendedModel = Model as PictureComponentModel;
+
+    }
+
+    private void OnModelPropertyChanged(string id, DraggableComponentModel model)
+    {
+        Model = model;
+        StateHasChanged();
+    }
+
+    private void HighLightChanged(object sender, EventArgs e)
+    {
+        var model = _Service.Find(_HighLightingService.HighLightingID);
+        if (model == null)
+        {
+            return;
+        }
+        Model = model;
+        StateHasChanged();
+    }
+}

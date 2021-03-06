@@ -163,18 +163,17 @@
             int h = (int)(component.Height);
             int w = (int)(component.Width);
 
-            if (component.ID == Model.ID)
+            if (component.ID == ExtendedModel.Models.ContainerID)
             {
-                Model.SetRect(x, y, h, w);
+                // 自分自身のOffsetで引いてしまって座標0になるのでサイズの更新のみとする
+                Model.SetSize(h, w);
             }
             else
             {
                 ExtendedModel.Models.Where(item => item.ID == component.ID)
                 .FirstOrDefault()?.SetRect(x, y, h, w);
             }
-
         }
-
     }
 
     /// <summary>

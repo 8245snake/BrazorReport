@@ -1,8 +1,8 @@
 ﻿
 
 .textblock {
-    background-color: #fafafa;
     cursor: grab;
+    border: solid 1px #E0E0E0;
 }
 
 .table {
@@ -15,7 +15,7 @@
 
 .group {
     cursor: grab;
-    background-color: #fafafa;
+    border: solid 1px #E0E0E0;
     overflow: hidden;
 }
 

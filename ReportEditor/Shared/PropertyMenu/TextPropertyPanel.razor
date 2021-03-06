@@ -1,0 +1,45 @@
+﻿@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+
+<table>
+    <tr>
+        <td>Text</td>
+        <td><input type="text" @bind="Text" /></td>
+    </tr>
+</table>
+
+@code {
+
+    [Parameter]
+    public DraggableComponentModel Model { get; set; }
+
+    public TextComponentModel ExtendedModel;
+
+    private string Text { get => ExtendedModel.Text; set => ExtendedModel.Text = value; }
+
+
+    protected override void OnInitialized()
+    {
+        _HighLightingService.HighLightChanged += HighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
+        ExtendedModel = Model as TextComponentModel;
+
+    }
+
+    private void OnModelPropertyChanged(string id, DraggableComponentModel model)
+    {
+        Model = model;
+        StateHasChanged();
+    }
+
+    private void HighLightChanged(object sender, EventArgs e)
+    {
+        var model = _Service.Find(_HighLightingService.HighLightingID);
+        if (model == null)
+        {
+            return;
+        }
+        Model = model;
+        StateHasChanged();
+    }
+}
