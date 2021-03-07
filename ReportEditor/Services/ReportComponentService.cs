@@ -37,8 +37,11 @@ namespace ReportEditor.Services
 
         public void Add(ContainerComponentModel paper)
         {
-            paper.Models.ItemPropertyChanged += OnItemPropertyChanged;
-            _Papers.Add(paper);
+            if (!paper.Models.Contains(paper))
+            {
+                paper.Models.ItemPropertyChanged += OnItemPropertyChanged;
+                _Papers.Add(paper);
+            }
         }
 
         public void Remove(ContainerComponentModel paper)

@@ -19,15 +19,17 @@
        @onmousedown:stopPropagation
        @onmouseup="OnMouseUp"
        @onmouseup:stopPropagation>
-    @for (int row = 0; row < ExtendedModel.Rows.Count; row++)
-    {
-        <tr>
-            @for (int col = 0; col < ExtendedModel.Cols.Count; col++)
-            {
-                <td>@row</td>
 
-            }
-        </tr>
+    @foreach (var row in ExtendedModel.Rows)
+    {
+    <tr>
+        @foreach (var cell in row.Cells)
+        {
+        <td>
+            <DraggableComponent Model="@cell.Model" />
+        </td>
+        }
+    </tr>
     }
 
 </table>

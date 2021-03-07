@@ -29,6 +29,21 @@ namespace ReportEditor.Models
             Relative,
             Stack,
         }
+
+        public enum VerticalAlign : int
+        {
+            Center,
+            Top,
+            Bottom
+        }
+
+        public enum HorizontalAlign : int
+        {
+            Center,
+            Left,
+            Right
+        }
+
         private string _ID;
         public string ID
         {

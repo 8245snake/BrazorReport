@@ -1,32 +1,32 @@
 ﻿@inherits DroppableContainer
 @inject DragAndDropService _DragAndDropService
 @inject HighLightingService _HighLightingService
-@inject ILogger<XrpPicture> logger;
+@inject ILogger<Paper> logger;
 @using Microsoft.Extensions.Logging;
 @using ReportEditor.Models;
 @using static ReportEditor.Models.DraggableComponentModel
 
-<section id="@Model.ID" class="sheet padding-5mm position-relative"
-     @ondragenter="OnDragEnter"
-     @ondragenter:stopPropagation
-     @ondragleave="OnDragLeave"
-     @ondragleave:stopPropagation
-     @ondragstart="OnDragStart"
-     @ondragstart:stopPropagation
-     @ondragover="OnDragOver"
-     @ondragover:preventDefault
-     @onmouseover="OnMouseOver"
-     @onmouseover:stopPropagation
-     @onmousemove="OnMouseMove"
-     @onmousemove:stopPropagation
-     @onclick="OnClick"
-     @onclick:stopPropagation
-     @onmousedown="OnMouseDown"
-     @onmousedown:stopPropagation
-     @onmouseup="OnMouseUp"
-     @onmouseup:stopPropagation
-     @ondrop="OnDrop"
-     @ondrop:stopPropagation>
+<section id="@Model.ID" class="@StyleClass"
+         @ondragenter="OnDragEnter"
+         @ondragenter:stopPropagation
+         @ondragleave="OnDragLeave"
+         @ondragleave:stopPropagation
+         @ondragstart="OnDragStart"
+         @ondragstart:stopPropagation
+         @ondragover="OnDragOver"
+         @ondragover:preventDefault
+         @onmouseover="OnMouseOver"
+         @onmouseover:stopPropagation
+         @onmousemove="OnMouseMove"
+         @onmousemove:stopPropagation
+         @onclick="OnClick"
+         @onclick:stopPropagation
+         @onmousedown="OnMouseDown"
+         @onmousedown:stopPropagation
+         @onmouseup="OnMouseUp"
+         @onmouseup:stopPropagation
+         @ondrop="OnDrop"
+         @ondrop:stopPropagation>
     @foreach (var item in ExtendedModel.Models)
     {
         <DraggableComponent Model="@item" />
@@ -36,4 +36,14 @@
 
 @code {
 
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+
+        BaseStyleClass = "sheet padding-5mm position-relative";
+        logger.LogInformation($"OnInitialized {Model.ID}");
+
+    }
 }

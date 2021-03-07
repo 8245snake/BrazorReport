@@ -1,5 +1,7 @@
 ﻿@inject HighLightingService _HighLightingService
 @inject ReportComponentService _Service
+@inject ILogger<PropertyWindow> logger;
+@using Microsoft.Extensions.Logging;
 
 <div>
     <input id="button-debug" type="button" value="デバッグ用" onclick="onDebugButtonClick()" />
@@ -15,7 +17,7 @@
         case DraggableComponentModel.DraggableComponentModelType.Table:
             break;
         case DraggableComponentModel.DraggableComponentModelType.Picture:
-            <PicturePropertyPanel Model="@Model"/>
+            <PicturePropertyPanel Model="@Model" />
 
             break;
         case DraggableComponentModel.DraggableComponentModelType.Container:
@@ -33,13 +35,14 @@
 
     protected override void OnInitialized()
     {
+        logger.LogInformation($"OnInitialized");
         _HighLightingService.HighLightChanged += HighLightChanged;
         _Service.ModelPropertyChanged += OnModelPropertyChanged;
     }
 
     private void OnModelPropertyChanged(string id, DraggableComponentModel model)
     {
-        Model = model;
+        logger.LogInformation($"OnModelPropertyChanged {id} {model.ID}");
         StateHasChanged();
     }
 
@@ -50,6 +53,7 @@
         {
             return;
         }
+        logger.LogInformation($"HighLightChanged {model.ID}");
         Model = model;
         StateHasChanged();
     }

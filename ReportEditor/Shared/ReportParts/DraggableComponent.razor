@@ -5,122 +5,6 @@
 @using Microsoft.Extensions.Logging;
 @using static ReportEditor.Models.DraggableComponentModel
 
-@code {
-
-    [Parameter]
-    public DraggableComponentModel Model { get; set; }
-
-    [Parameter]
-    public bool IsHighLighting
-    {
-        get => Model.IsHighLighting;
-        set
-        {
-            Model.IsHighLighting = value;
-            if (value) { _HighLightingService.HighLightingID = Model.ID; }
-            StateHasChanged();
-        }
-    }
-
-    [Parameter]
-    public bool IsGrabbing
-    {
-        get => Model.IsGrabbing;
-        set
-        {
-            if (Model.IsGrabbing == value) { return; }
-            Model.IsGrabbing = value;
-            StateHasChanged();
-        }
-    }
-
-    public string Draggable { get => (Model.IsDraggable) ? "true" : "false"; }
-    public bool IsDragging = false;
-
-    public virtual string StyleClass
-    {
-        get
-        {
-            string cls = Model.LayoutMode.PositionClass();
-            cls += $" {Model.ModelType.Name()}";
-            cls += (IsHighLighting) ? " highlight" : "";
-            cls += (IsGrabbing) ? " grabbing" : "";
-            return cls;
-        }
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        if (Model != null)
-        {
-            Model.PropertyChanged += OnPropertyChanged;
-        }
-    }
-
-    private void OnPropertyChanged(DraggableComponentModel model)
-    {
-        StateHasChanged();
-        //logger.LogInformation("OnPropertyChanged");
-    }
-
-    protected virtual void OnDragEnter()
-    {
-        logger.LogInformation("OnDragEnter");
-        IsDragging = true;
-    }
-
-
-
-    protected virtual void OnDragLeave(DragEventArgs e)
-    {
-        //logger.LogInformation("OnDragLeave");
-        IsDragging = false;
-    }
-
-    protected virtual void OnDragStart(DragEventArgs e)
-    {
-        logger.LogInformation($"OnDragStart {Model.ID}");
-        _DragAndDropService.DataSource = Model;
-        _DragAndDropService.Data = Model.Clone();
-    }
-
-    protected virtual void OnMouseOver(MouseEventArgs e)
-    {
-
-    }
-
-    protected virtual void OnClick(MouseEventArgs e)
-    {
-        logger.LogInformation(this.GetType().Name + "_OnClick");
-        IsHighLighting = true;
-    }
-
-    protected virtual void OnMouseDown(MouseEventArgs e)
-    {
-        logger.LogInformation(this.GetType().Name + "_OnMouseDown");
-        IsHighLighting = true;
-
-        IsGrabbing = true;
-        Model.GrabbingShiftX = e.ClientX - Model.ComponentRect.X;
-        Model.GrabbingShiftY = e.ClientY - Model.ComponentRect.Y;
-
-        _DragAndDropService.DataSource = Model;
-        _DragAndDropService.Data = Model;
-    }
-
-    protected virtual void OnMouseUp(MouseEventArgs e)
-    {
-        //logger.LogInformation("OnMouseUp");
-        IsGrabbing = false;
-        Model.GrabbingShiftX = 0;
-        Model.GrabbingShiftY = 0;
-
-        _DragAndDropService.DataSource = null;
-        _DragAndDropService.Data = null;
-    }
-}
-
 
 
 @switch (Model.ModelType)
@@ -148,6 +32,130 @@
     default:
         break;
 }
+
+
+
+@code {
+
+    [Parameter]
+    public DraggableComponentModel Model { get; set; }
+
+    [Parameter]
+    public bool IsHighLighting
+    {
+        get => Model.IsHighLighting;
+        set
+        {
+            Model.IsHighLighting = value;
+            if (value) { _HighLightingService.HighLightingID = Model.ID; }
+            //StateHasChanged();
+        }
+    }
+
+    [Parameter]
+    public bool IsGrabbing
+    {
+        get => Model.IsGrabbing;
+        set
+        {
+            if (Model.IsGrabbing == value) { return; }
+            Model.IsGrabbing = value;
+            StateHasChanged();
+        }
+    }
+
+    public string Draggable { get => (Model.IsDraggable) ? "true" : "false"; }
+    //public bool IsDragging = false;
+
+    protected string BaseStyleClass;
+
+    public virtual string StyleClass
+    {
+        get
+        {
+            string cls = BaseStyleClass;
+            cls += (IsHighLighting) ? " highlight" : "";
+            cls += (IsGrabbing) ? " grabbing" : "";
+            return cls;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        //logger.LogInformation($"OnInitialized {Model?.ID}");
+
+        //base.OnInitialized();
+        if (Model != null)
+        {
+            Model.PropertyChanged += OnPropertyChanged;
+            BaseStyleClass = $"{Model.ModelType.Name()} {Model.LayoutMode.PositionClass()}";
+        }
+
+    }
+
+    private void OnPropertyChanged(DraggableComponentModel model)
+    {
+        //logger.LogInformation("OnPropertyChanged");
+        StateHasChanged();
+    }
+
+    protected virtual void OnDragEnter()
+    {
+        //logger.LogInformation("OnDragEnter");
+        //IsDragging = true;
+    }
+
+
+
+    protected virtual void OnDragLeave(DragEventArgs e)
+    {
+        //logger.LogInformation("OnDragLeave");
+        //IsDragging = false;
+    }
+
+    protected virtual void OnDragStart(DragEventArgs e)
+    {
+        logger.LogInformation($"OnDragStart {Model.ID}");
+        _DragAndDropService.DataSource = Model;
+        _DragAndDropService.Data = Model.Clone();
+    }
+
+    protected virtual void OnMouseOver(MouseEventArgs e)
+    {
+
+    }
+
+    protected virtual void OnClick(MouseEventArgs e)
+    {
+        //logger.LogInformation("OnMouseDown");
+        IsHighLighting = true;
+    }
+
+    protected virtual void OnMouseDown(MouseEventArgs e)
+    {
+        //logger.LogInformation("OnMouseDown");
+        IsHighLighting = true;
+
+        IsGrabbing = true;
+        Model.GrabbingShiftX = e.ClientX - Model.ComponentRect.X;
+        Model.GrabbingShiftY = e.ClientY - Model.ComponentRect.Y;
+
+        _DragAndDropService.DataSource = Model;
+        _DragAndDropService.Data = Model;
+    }
+
+    protected virtual void OnMouseUp(MouseEventArgs e)
+    {
+        //logger.LogInformation("OnMouseUp");
+        IsGrabbing = false;
+        Model.GrabbingShiftX = 0;
+        Model.GrabbingShiftY = 0;
+
+        _DragAndDropService.DataSource = null;
+        _DragAndDropService.Data = null;
+    }
+}
+
 
 
 
