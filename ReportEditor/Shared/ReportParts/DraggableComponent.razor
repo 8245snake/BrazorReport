@@ -34,7 +34,7 @@
         }
     }
 
-    public string Draggable { get => (Model.LayoutMode == DraggableComponentLayoutMode.Stack) ? "true" : "false"; }
+    public string Draggable { get => (Model.IsDraggable) ? "true" : "false"; }
     public bool IsDragging = false;
 
     public virtual string StyleClass
@@ -80,7 +80,7 @@
 
     protected virtual void OnDragStart(DragEventArgs e)
     {
-        logger.LogInformation("OnDragStart");
+        logger.LogInformation($"OnDragStart {Model.ID}");
         _DragAndDropService.DataSource = Model;
         _DragAndDropService.Data = Model.Clone();
     }

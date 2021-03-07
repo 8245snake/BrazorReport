@@ -3,7 +3,8 @@
 
 
     <div class="@StyleClass" draggable="true"
-         @ondragstart="OnDragStart" >
+         @ondragstart="OnDragStart"
+         @ondragstart:stopPropagation>
         @Model.Text
     </div>
 

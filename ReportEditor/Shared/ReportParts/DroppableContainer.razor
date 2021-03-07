@@ -89,6 +89,7 @@
         // ドロップ元の参照を探す
         DraggableComponentModel source = _DragAndDropService.DataSource as DraggableComponentModel;
         DraggableComponentModel model = _Service.Find(source?.ID);
+
         if (model == null)
         {
             // ツールボックスからドロップされたとき
@@ -130,6 +131,9 @@
         DraggableComponentModel model = _DragAndDropService.Data as DraggableComponentModel;
         if (model?.IsGrabbing != true) { return; }
 
+        // とりあえず絶対座標のみ
+        if (model?.LayoutMode != DraggableComponentLayoutMode.Absolute) { return; }
+
         switch (model.LayoutMode)
         {
             case DraggableComponentLayoutMode.Absolute:
@@ -138,7 +142,7 @@
             case DraggableComponentLayoutMode.Relative:
                 break;
             case DraggableComponentLayoutMode.Stack:
-                PutComponentStack(model, e);
+                //PutComponentStack(model, e);
                 break;
             default:
                 break;

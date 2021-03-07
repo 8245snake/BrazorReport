@@ -96,6 +96,16 @@ namespace ReportEditor.Models
 
         public double GrabbingShiftX { get; set; }
         public double GrabbingShiftY { get; set; }
+        public bool IsDraggable
+        {
+            get {
+                if (LayoutMode != DraggableComponentLayoutMode.Stack)
+                {
+                    return false;
+                }
+                return IsHighLighting;
+            }
+        }
 
         protected virtual void OnPropertyChanged(EventArgs e)
         {
