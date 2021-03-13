@@ -19,6 +19,8 @@ namespace ReportEditor.Models
                     return "picture";
                 case DraggableComponentModel.DraggableComponentModelType.Container:
                     return "group";
+                case DraggableComponentModel.DraggableComponentModelType.TableCell:
+                    return "cell";
             }
 
             return "other";

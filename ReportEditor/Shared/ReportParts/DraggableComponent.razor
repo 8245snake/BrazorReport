@@ -24,11 +24,14 @@
         <XrpPicture Model="@Model" />
 
         break;
+
     case DraggableComponentModelType.Container:
+    case DraggableComponentModelType.TableCell:
 
         <DroppableContainer Model="@Model" />
 
         break;
+
     default:
         break;
 }

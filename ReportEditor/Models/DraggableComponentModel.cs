@@ -20,6 +20,7 @@ namespace ReportEditor.Models
             Table,
             Picture,
             Container,
+            TableCell,
             Dummy,
         }
 
@@ -116,8 +117,15 @@ namespace ReportEditor.Models
             get {
                 if (LayoutMode != DraggableComponentLayoutMode.Stack)
                 {
+                    // いまのところスタックタイプのみドラッグ可能
                     return false;
                 }
+                if (ModelType == DraggableComponentModelType.TableCell)
+                {
+                    // テーブルセルはドラッグ禁止
+                    return false;
+                }
+                // ハイライトしているもののみドラッグ可能
                 return IsHighLighting;
             }
         }
@@ -190,11 +198,16 @@ namespace ReportEditor.Models
 
         public string GetRectStyle()
         {
+            if (ModelType == DraggableComponentModelType.TableCell)
+            {
+                return "height:100%; width:100%;";
+            }
             int x = ComponentRect.X;
             int y = ComponentRect.Y;
             int height = ComponentRect.Height;
             int width = ComponentRect.Width;
-            return $"height:{height}px; width:{width}px; left:{x}px; top:{y}px;";
+            string unit = "px";
+            return $"height:{height}{unit}; width:{width}{unit}; left:{x}{unit}; top:{y}{unit};";
         }
 
 

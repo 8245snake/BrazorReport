@@ -4,35 +4,45 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 
-<table id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
-       @ondragenter="OnDragEnter"
-       @ondragenter:stopPropagation
-       @ondragleave="OnDragLeave"
-       @ondragleave:stopPropagation
-       @ondragstart="OnDragStart"
-       @ondragstart:stopPropagation
-       @onmouseover="OnMouseOver"
-       @onmouseover:stopPropagation
-       @onclick="OnClick"
-       @onclick:stopPropagation
-       @onmousedown="OnMouseDown"
-       @onmousedown:stopPropagation
-       @onmouseup="OnMouseUp"
-       @onmouseup:stopPropagation>
+    <table id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+           @ondragenter="OnDragEnter"
+           @ondragenter:stopPropagation
+           @ondragleave="OnDragLeave"
+           @ondragleave:stopPropagation
+           @ondragstart="OnDragStart"
+           @ondragstart:stopPropagation
+           @onmouseover="OnMouseOver"
+           @onmouseover:stopPropagation
+           @onclick="OnClick"
+           @onclick:stopPropagation
+           @onmousedown="OnMouseDown"
+           @onmousedown:stopPropagation
+           @onmouseup="OnMouseUp"
+           @onmouseup:stopPropagation>
 
-    @foreach (var row in ExtendedModel.Rows)
-    {
-    <tr>
-        @foreach (var cell in row.Cells)
+        <tr style="height:30px;">
+            @foreach (var col in ExtendedModel.Cols)
+            {
+                <th class="xrp2-th" style="width:100px;" align="center">
+                    @col.Text
+                </th>
+            }
+        </tr>
+        @foreach (var row in ExtendedModel.Rows)
         {
-        <td class="xrp2-td">
-            <DraggableComponent Model="@cell.Model" />
-        </td>
+            <tr style="height:100px;">
+                @foreach (var cell in row.Cells)
+                {
+                    <td class="xrp2-td">
+                        <DraggableComponent Model="@cell.Model" />
+                    </td>
+                }
+            </tr>
         }
-    </tr>
-    }
 
-</table>
+
+
+    </table>
 
 @code {
     public TableComponentModel ExtendedModel;

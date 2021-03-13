@@ -8,6 +8,8 @@ namespace ReportEditor.Services
 {
     public class ReportComponentService
     {
+        public string ParameterUnit = "px";
+
         // リストのリスト
         private List<ContainerComponentModel> _Papers = new List<ContainerComponentModel>();
 

@@ -29,6 +29,7 @@
     private void OnModelPropertyChanged(string id, DraggableComponentModel model)
     {
         Model = model;
+        ExtendedModel = Model as TextComponentModel;
         StateHasChanged();
     }
 
@@ -40,6 +41,7 @@
             return;
         }
         Model = model;
+        ExtendedModel = Model as TextComponentModel;
         StateHasChanged();
     }
 }

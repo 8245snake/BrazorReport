@@ -22,6 +22,7 @@ namespace ReportEditor.Models
                 case DraggableComponentModelType.Picture:
                     return new PictureComponentModel(text, type, defaultHeight, defaultWidth, layout);
                 case DraggableComponentModelType.Container:
+                case DraggableComponentModelType.TableCell:
                     return new ContainerComponentModel(text, type, defaultHeight, defaultWidth, layout);
                 default:
                     break;
