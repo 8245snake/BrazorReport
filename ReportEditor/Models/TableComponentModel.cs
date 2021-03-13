@@ -10,7 +10,7 @@ namespace ReportEditor.Models
     {
         public List<TableRow> Rows = new List<TableRow>();
         public List<TableColumn> Cols = new List<TableColumn>();
-        public int HeaderRowHeight = 100;
+        public int HeaderRowHeight = 50;
         
         public TableComponentModel(string text, DraggableComponentModelType type, int defaultHeight, int defaultWidth, DraggableComponentLayoutMode layout) : base(text, type, defaultHeight, defaultWidth, layout)
         {
@@ -40,7 +40,7 @@ namespace ReportEditor.Models
     public class TableRow
     {
         public int RowIndex;
-        public int RowHeight;
+        public int RowHeight = 100;
         public List<TableCell> Cells = new List<TableCell>();
 
         public TableRow(int index)

@@ -4,7 +4,7 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 
-    <table id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+    <div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
            @ondragenter="OnDragEnter"
            @ondragenter:stopPropagation
            @ondragleave="OnDragLeave"
@@ -20,29 +20,18 @@
            @onmouseup="OnMouseUp"
            @onmouseup:stopPropagation>
 
-        <tr style="height:30px;">
-            @foreach (var col in ExtendedModel.Cols)
-            {
-                <th class="xrp2-th" style="width:100px;" align="center">
-                    @col.Text
-                </th>
-            }
-        </tr>
         @foreach (var row in ExtendedModel.Rows)
         {
-            <tr style="height:100px;">
-                @foreach (var cell in row.Cells)
-                {
-                    <td class="xrp2-td">
-                        <DraggableComponent Model="@cell.Model" />
-                    </td>
-                }
-            </tr>
+        <div class="xrp2-row" style="height:@string.Format("{0}px",row.RowHeight);">
+            @foreach (var cell in row.Cells)
+            {
+            <div class="xrp2-col" style="width:@string.Format("{0}px", ExtendedModel.Cols[cell.ColIndex].ColWidth);height:@string.Format("{0}px",row.RowHeight);">
+                <DraggableComponent Model="@cell.Model" />
+            </div>
+            }
+        </div>
         }
-
-
-
-    </table>
+    </div>
 
 @code {
     public TableComponentModel ExtendedModel;

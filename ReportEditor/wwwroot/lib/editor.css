@@ -23,7 +23,22 @@
     table-layout: fixed !important;
 }
 
-.cell {
+.xrp2-row {
+    overflow: hidden;
+    margin: 0px !important;
+    padding: 0px !important;
+    font-size: 0;
+}
+
+.xrp2-col {
+    border: solid 1px #E0E0E0;
+    display: inline-block;
+    margin: 0px !important;
+    padding: 0px !important;
+    font-size: 12px; /* フォントサイズ0になっているので指定する */
+}
+
+/*.cell {
     border: solid 1px #E0E0E0;
 }
 
@@ -38,7 +53,7 @@
     color : white;
     background-color:gray;
     text-align:center;
-}
+}*/
 
 
 .picture {
