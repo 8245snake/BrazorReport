@@ -3,9 +3,9 @@
 
 <div>
     <select class="custom-select" @onselect="OnSelect">
-        @foreach (var child in ExtendedModel.Children(false))
+        @foreach (var child in ExtendedModel?.Children(false))
         {
-        <option value="@child.ID">@child.Name</option>
+        <option value="@child.ID">@child?.Name</option>
         }
 
     </select>

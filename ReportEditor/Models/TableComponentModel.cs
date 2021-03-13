@@ -71,7 +71,14 @@ namespace ReportEditor.Models
                 Rows[rowIndex].Cells.Add(new TableCell(rowIndex, colIndex));
             }
         }
-
+        public override DraggableComponentModel Clone()
+        {
+            TableComponentModel clone = (TableComponentModel)base.Clone();
+            clone.Rows = new List<TableRow>(Rows.Select(row => row.Clone()));
+            clone.Cols = new List<TableColumn>(Cols.Select(col => col.Clone()));
+            clone.HeaderRowHeight = HeaderRowHeight;
+            return clone;
+        }
     }
     public class TableRow
     {
@@ -82,6 +89,13 @@ namespace ReportEditor.Models
         public TableRow(int index)
         {
             RowIndex = index;
+        }
+        public TableRow Clone()
+        {
+            var clone = new TableRow(RowIndex);
+            clone.RowHeight = RowHeight;
+            clone.Cells = new List<TableCell>(Cells.Select(cell => cell.Clone()));
+            return clone;
         }
     }
 
@@ -95,6 +109,12 @@ namespace ReportEditor.Models
         {
             ColIndex = index;
             Text = text;
+        }
+
+        public TableColumn Clone()
+        {
+            var clone = new TableColumn(ColIndex, Text);
+            return clone;
         }
     }
 
@@ -112,5 +132,14 @@ namespace ReportEditor.Models
             DraggableComponentModelFactory f = new DraggableComponentModelFactory();
             Model = f.Create("cell", DraggableComponentModelType.TableCell, 100, 200, DraggableComponentLayoutMode.Cell) as ContainerComponentModel;
         }
+
+        public TableCell Clone()
+        {
+            var clone = new TableCell(RowIndex, ColIndex);
+            clone.Model = (ContainerComponentModel)this.Model.Clone();
+            return clone;
+        }
     }
+
+
 }
