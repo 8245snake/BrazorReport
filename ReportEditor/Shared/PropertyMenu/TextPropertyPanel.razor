@@ -15,7 +15,7 @@
 
     public TextComponentModel ExtendedModel;
 
-    private string Text { get => ExtendedModel.Text; set => ExtendedModel.Text = value; }
+    private string Text { get => ExtendedModel?.Text; set => ExtendedModel.Text = value; }
 
 
     protected override void OnInitialized()
