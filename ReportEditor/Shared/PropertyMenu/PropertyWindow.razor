@@ -3,31 +3,32 @@
 @inject ILogger<PropertyWindow> logger;
 @using Microsoft.Extensions.Logging;
 
-<div>
-    <input id="button-debug" type="button" value="デバッグ用" onclick="onDebugButtonClick()" />
+    <div >
+        <input id="button-debug" type="button" value="デバッグ用" onclick="onDebugButtonClick()" />
 
-    <PropertyPanelBase Model="@Model" />
+        <PropertyPanelBase Model="@Model" />
 
-    @switch (Model.ModelType)
-    {
-        case DraggableComponentModel.DraggableComponentModelType.TextBlock:
-            <TextPropertyPanel Model="@Model" />
+        @switch (Model.ModelType)
+        {
+            case DraggableComponentModel.DraggableComponentModelType.TextBlock:
+                <TextPropertyPanel Model="@Model" />
 
-            break;
-        case DraggableComponentModel.DraggableComponentModelType.Table:
-            break;
-        case DraggableComponentModel.DraggableComponentModelType.Picture:
-            <PicturePropertyPanel Model="@Model" />
+                break;
+            case DraggableComponentModel.DraggableComponentModelType.Table:
+                break;
+            case DraggableComponentModel.DraggableComponentModelType.Picture:
+                <PicturePropertyPanel Model="@Model" />
 
-            break;
-        case DraggableComponentModel.DraggableComponentModelType.Container:
-            break;
-        default:
-            break;
-    }
+                break;
+            case DraggableComponentModel.DraggableComponentModelType.Container:
+                <ContainerPropertyPanel Model="@Model" />
+                break;
+            default:
+                break;
+        }
 
 
-</div>
+    </div>
 
 @code {
 

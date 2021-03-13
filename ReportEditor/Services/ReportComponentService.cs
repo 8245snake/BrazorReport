@@ -37,6 +37,14 @@ namespace ReportEditor.Services
             }
         }
 
+        private void OnItemPropertyChanged(DraggableComponentModelList list, DraggableComponentModel item)
+        {
+            if (list != null)
+            {
+                OnModelPropertyChanged(list.ContainerID, item);
+            }
+        }
+
         public void Add(ContainerComponentModel paper)
         {
             if (!paper.Models.Contains(paper))
@@ -50,6 +58,17 @@ namespace ReportEditor.Services
         {
             paper.Models.ItemPropertyChanged -= OnItemPropertyChanged;
             _Papers.Remove(paper);
+        }
+
+        public void Remove(DraggableComponentModel model)
+        {
+            DraggableComponentModel item;
+            DraggableComponentModelList parent;
+
+            if (Find(model.ID, out item, out parent))
+            {
+                parent.Remove(item);
+            }
         }
 
         public DraggableComponentModel Find(string id)
@@ -79,30 +98,17 @@ namespace ReportEditor.Services
                 if (paper.ID == id)
                 {
                     item = paper;
-                    parent = null;
+                    parent = new DraggableComponentModelList(_Papers);
                     return true;
                 }
 
-                foreach (var model in paper.Models)
+                foreach (var tuple in paper.EnumAllModelListPairs(true))
                 {
-                    if (model.ID == id)
+                    if (tuple.Item1.ID == id)
                     {
-                        item = model;
-                        parent = paper.Models;
+                        item = tuple.Item1;
+                        parent = tuple.Item2;
                         return true;
-                    }
-                    ContainerComponentModel container = model as ContainerComponentModel;
-                    if (container != null)
-                    {
-                        foreach (var child in container.Children())
-                        {
-                            if (child.ID == id)
-                            {
-                                item = child;
-                                parent = container.Models;
-                                return true;
-                            }
-                        }
                     }
                 }
             }
@@ -112,23 +118,5 @@ namespace ReportEditor.Services
             return false;
         }
 
-        public void Remove(DraggableComponentModel model)
-        {
-            DraggableComponentModel item;
-            DraggableComponentModelList parent;
-
-            if (Find(model.ID, out item, out parent))
-            {
-                parent.Remove(item);
-            }
-        }
-
-        private void OnItemPropertyChanged(DraggableComponentModelList list, DraggableComponentModel item)
-        {
-            if (list != null)
-            {
-                OnModelPropertyChanged(list.ContainerID, item);
-            }
-        }
     }
 }

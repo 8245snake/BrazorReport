@@ -9,9 +9,10 @@ body {
 .sheet {
     margin: 0;
     position: relative;
-    overflow:hidden;
+    overflow: hidden;
     box-sizing: border-box;
     page-break-after: always;
+    border: solid 2px #E0E0E0;
 }
 
 /** Paper sizes **/

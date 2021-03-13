@@ -1,35 +1,37 @@
 ﻿@inject HighLightingService _HighLightingService
 @inject ReportComponentService _Service
 
-<table>
-    <tr>
-        <td>Image Path</td>
-        <td><input type="text" @bind="ImagePath" /></td>
-    </tr>
-</table>
+<div>
+    <select class="custom-select" @onselect="OnSelect">
+        @foreach (var child in ExtendedModel.Children(false))
+        {
+        <option value="@child.ID">@child.Name</option>
+        }
+
+    </select>
+</div>
 
 @code {
 
     [Parameter]
     public DraggableComponentModel Model { get; set; }
 
-    public PictureComponentModel ExtendedModel;
+    public ContainerComponentModel ExtendedModel;
 
-    private string ImagePath { get => ExtendedModel?.ImagePath; set => ExtendedModel.ImagePath = value; }
 
 
     protected override void OnInitialized()
     {
         _HighLightingService.HighLightChanged += HighLightChanged;
         _Service.ModelPropertyChanged += OnModelPropertyChanged;
-        ExtendedModel = Model as PictureComponentModel;
+        ExtendedModel = Model as ContainerComponentModel;
 
     }
 
     private void OnModelPropertyChanged(string id, DraggableComponentModel model)
     {
         Model = model;
-        ExtendedModel = Model as PictureComponentModel;
+        ExtendedModel = Model as ContainerComponentModel;
         StateHasChanged();
     }
 
@@ -41,7 +43,12 @@
             return;
         }
         Model = model;
-        ExtendedModel = Model as PictureComponentModel;
+        ExtendedModel = Model as ContainerComponentModel;
         StateHasChanged();
+    }
+
+    private void OnSelect(EventArgs e)
+    {
+
     }
 }

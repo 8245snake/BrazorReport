@@ -89,13 +89,19 @@ namespace ReportEditor.Models
 
         #endregion
 
-
-
         public DraggableComponentModelList()
         {
             ContainerIdNumber++;
             ContainerID = $"sheet-{ContainerIdNumber}";
         }
+
+        public DraggableComponentModelList(IEnumerable<DraggableComponentModel> items)
+        {
+            ContainerIdNumber++;
+            ContainerID = $"sheet-{ContainerIdNumber}";
+            AddRange(items);
+        }
+
 
         public void AddRange(IEnumerable<DraggableComponentModel> items)
         {

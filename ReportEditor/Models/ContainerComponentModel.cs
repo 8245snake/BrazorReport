@@ -14,18 +14,34 @@ namespace ReportEditor.Models
         {
         }
 
-        public IEnumerable<DraggableComponentModel> Children()
+        public IEnumerable<DraggableComponentModel> Children(bool recursive)
+        {
+            foreach (var tuple in EnumAllModelListPairs(recursive))
+            {
+                yield return tuple.Item1;
+            }
+        }
+
+        /// <summary>
+        /// 配下の要素とその親の参照をタプルで返す
+        /// </summary>
+        /// <param name="recursive">再帰的に探索するか</param>
+        /// <returns></returns>
+        public IEnumerable<Tuple<DraggableComponentModel, DraggableComponentModelList>> EnumAllModelListPairs(bool recursive)
         {
             foreach (DraggableComponentModel item in Models)
             {
-                yield return item;
+                yield return new Tuple<DraggableComponentModel, DraggableComponentModelList>(item, Models);
 
-                ContainerComponentModel container = item as ContainerComponentModel;
-                if (container != null)
+                if (recursive)
                 {
-                    foreach (var child in container.Children())
+                    ContainerComponentModel container = item as ContainerComponentModel;
+                    if (container != null)
                     {
-                        yield return child;
+                        foreach (var child in container.EnumAllModelListPairs(recursive))
+                        {
+                            yield return child;
+                        }
                     }
                 }
             }
