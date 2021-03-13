@@ -2,11 +2,18 @@
 @inject ReportComponentService _Service
 
 <div>
-    <select class="custom-select" @onselect="OnSelect">
-        @foreach (var child in ExtendedModel?.Children(false))
+    <div>子要素が表示されます</div>
+    <select class="custom-select" @onchange="OnChange">
+        @if (ExtendedModel?.Children(false) != null)
         {
-        <option value="@child.ID">@child?.Name</option>
+            <option value="none"></option>
+
+            @foreach (var child in ExtendedModel?.Children(false))
+            {
+                <option value="@child.ID">@child?.Name</option>
+            }
         }
+
 
     </select>
 </div>
@@ -47,8 +54,9 @@
         StateHasChanged();
     }
 
-    private void OnSelect(EventArgs e)
-    {
 
+    private void OnChange(ChangeEventArgs e)
+    {
+        _HighLightingService.HighLightingID = (string)e.Value;
     }
 }
