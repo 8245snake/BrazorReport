@@ -29,6 +29,7 @@ namespace ReportEditor.Models
             Absolute,
             Relative,
             Stack,
+            Cell,
         }
 
         public enum VerticalAlign : int

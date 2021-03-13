@@ -41,8 +41,8 @@
     public ContainerComponentModel ExtendedModel;
     private ComponentInfo[] Components = new ComponentInfo[] { };
 
-    private double OffsetX { get => (Components.Length > 0) ? Components[0].X : 0; }
-    private double OffsetY { get => (Components.Length > 0) ? Components[0].Y : 0; }
+    protected virtual double OffsetX { get => (Components.Length > 0) ? Components[0].X : 0; }
+    protected virtual double OffsetY { get => (Components.Length > 0) ? Components[0].Y : 0; }
 
     protected override void OnInitialized()
     {
@@ -187,6 +187,7 @@
     {
         var shiftX = (item.IsGrabbing) ? item.GrabbingShiftX - OffsetX : 0.0;
         var shiftY = (item.IsGrabbing) ? item.GrabbingShiftY - OffsetY : 0.0;
+
 
         int x = (int)(e.ClientX - OffsetX - shiftX);
         int y = (int)(e.ClientY - OffsetY - shiftY);

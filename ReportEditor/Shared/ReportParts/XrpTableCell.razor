@@ -1,0 +1,41 @@
+﻿@inherits DroppableContainer
+@inject ILogger<XrpTableCell> logger;
+@using Microsoft.Extensions.Logging;
+@using static ReportEditor.Models.DraggableComponentModel
+
+
+<div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+     @ondragenter="OnDragEnter"
+     @ondragenter:stopPropagation
+     @ondragleave="OnDragLeave"
+     @ondragleave:stopPropagation
+     @ondragstart="OnDragStart"
+     @ondragstart:stopPropagation
+     @ondragover="OnDragOver"
+     @ondragover:preventDefault
+     @onmouseover="OnMouseOver"
+     @onmouseover:stopPropagation
+     @onmousemove="OnMouseMove"
+     @onmousemove:stopPropagation
+     @onclick="OnClick"
+     @onclick:stopPropagation
+     @onmousedown="OnMouseDown"
+     @onmousedown:stopPropagation
+     @onmouseup="OnMouseUp"
+     @onmouseup:stopPropagation
+     @ondrop="OnDrop"
+     @ondrop:stopPropagation>
+    @foreach (var item in ExtendedModel.Models)
+    {
+        <DraggableComponent Model="@item" />
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public TableCell CellData { get; set; }
+
+
+
+}

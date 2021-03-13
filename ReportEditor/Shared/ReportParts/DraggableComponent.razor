@@ -26,9 +26,14 @@
         break;
 
     case DraggableComponentModelType.Container:
-    case DraggableComponentModelType.TableCell:
 
         <DroppableContainer Model="@Model" />
+
+        break;
+
+    case DraggableComponentModelType.TableCell:
+
+        <XrpTableCell Model="@Model" />
 
         break;
 

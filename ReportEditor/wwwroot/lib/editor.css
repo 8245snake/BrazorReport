@@ -41,11 +41,12 @@
     font-size: 12px; /* フォントサイズ0になっているので指定する */
 }
 
-/*.cell {
-    border: solid 1px #E0E0E0;
+.cell {
+    background-color:transparent;
+    position:relative;
 }
 
-.xrp2-td {
+/*.xrp2-td {
     margin: 0px !important;
     padding: 0px !important;
 }

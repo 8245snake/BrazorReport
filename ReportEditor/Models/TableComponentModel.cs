@@ -17,25 +17,61 @@ namespace ReportEditor.Models
             int initialRowCount = 2;
             int initialColCount = 3;
 
-            for (int colIndex = 0; colIndex < initialColCount; colIndex++)
+            for (int i = 0; i < initialColCount; i++)
             {
-                TableColumn col = new TableColumn(colIndex, $"列{colIndex}");
-                Cols.Add(col);
+                AddNewColumn();
             }
 
-            for (int rowIndex = 0; rowIndex < initialRowCount; rowIndex++)
+            for (int i = 0; i < initialRowCount; i++)
             {
-                TableRow row = new TableRow(rowIndex);
-                
-                for (int colIndex = 0; colIndex < initialColCount; colIndex++)
-                {
-                    TableCell cell = new TableCell(rowIndex, colIndex);
-                    row.Cells.Add(cell);
-                }
+                AddNewRow();
+            }
+            UpdateCellsLoaction();
+        }
 
-                Rows.Add(row);
+        public void AddNewRow()
+        {
+            int rowIndex = Rows.Count;
+            TableRow row = new TableRow(rowIndex);
+
+            for (int colIndex = 0; colIndex < Cols.Count; colIndex++)
+            {
+                TableCell cell = new TableCell(rowIndex, colIndex);
+                row.Cells.Add(cell);
+            }
+
+            Rows.Add(row);
+        }
+
+        public void UpdateCellsLoaction()
+        {
+            int x = 0;
+            int y = 0;
+
+            for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
+            {
+                for (int colIndex = 0; colIndex < Cols.Count; colIndex++)
+                {
+                    Rows[rowIndex].Cells[colIndex].Model.SetLocation(x, y);
+                    x += Cols[colIndex].ColWidth;
+                }
+                x = 0;
+                y += Rows[rowIndex].RowHeight;
             }
         }
+
+        public void AddNewColumn()
+        {
+            int colIndex = Cols.Count;
+            TableColumn col = new TableColumn(colIndex, $"列{colIndex}");
+            Cols.Add(col);
+
+            for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
+            {
+                Rows[rowIndex].Cells.Add(new TableCell(rowIndex, colIndex));
+            }
+        }
+
     }
     public class TableRow
     {
@@ -74,7 +110,7 @@ namespace ReportEditor.Models
             RowIndex = rowIndex;
             ColIndex = colIndex;
             DraggableComponentModelFactory f = new DraggableComponentModelFactory();
-            Model = f.Create("cell", DraggableComponentModelType.TableCell, 100, 200, DraggableComponentLayoutMode.Stack) as ContainerComponentModel;
+            Model = f.Create("cell", DraggableComponentModelType.TableCell, 100, 200, DraggableComponentLayoutMode.Cell) as ContainerComponentModel;
         }
     }
 }

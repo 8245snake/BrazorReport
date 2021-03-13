@@ -26,7 +26,7 @@
             @foreach (var cell in row.Cells)
             {
             <div class="xrp2-col" style="width:@string.Format("{0}px", ExtendedModel.Cols[cell.ColIndex].ColWidth);height:@string.Format("{0}px",row.RowHeight);">
-                <DraggableComponent Model="@cell.Model" />
+                <XrpTableCell Model="@cell.Model" CellData="@cell"/>
             </div>
             }
         </div>

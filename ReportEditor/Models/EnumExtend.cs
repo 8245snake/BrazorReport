@@ -43,7 +43,7 @@ namespace ReportEditor.Models
                     return "position-static";
             }
 
-            return "position-absolute";
+            return "position-relative";
         }
     }
 }
