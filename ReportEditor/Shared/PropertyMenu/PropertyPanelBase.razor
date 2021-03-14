@@ -1,29 +1,30 @@
 ﻿@inject HighLightingService _HighLightingService
 @inject ReportComponentService _Service
+@using static ReportEditor.Models.DraggableComponentModel 
 
-<table>
-    <thead>基本</thead>
-    <tr>
-        <td>Name</td>
-        <td><input type="text" @bind="Name" /></td>
-    </tr>
-    <tr>
-        <td>X</td>
-        <td><input type="text" @bind="X" /></td>
-    </tr>
-    <tr>
-        <td>Y</td>
-        <td><input type="text" @bind="Y" /></td>
-    </tr>
-    <tr>
-        <td>Height</td>
-        <td><input type="text" @bind="Height" /></td>
-    </tr>
-    <tr>
-        <td>Width</td>
-        <td><input type="text" @bind="Width" /></td>
-    </tr>
-</table>
+    <table>
+        <thead>基本</thead>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" @bind="Name" /></td>
+        </tr>
+        <tr>
+            <td>X</td>
+            <td><input type="text" @bind="X" /></td>
+        </tr>
+        <tr>
+            <td>Y</td>
+            <td><input type="text" @bind="Y" /></td>
+        </tr>
+        <tr>
+            <td>Height</td>
+            <td><input type="text" @bind="Height" /></td>
+        </tr>
+        <tr>
+            <td>Width</td>
+            <td><input type="text" @bind="Width" /></td>
+        </tr>
+    </table>
 
 @code {
 
@@ -46,6 +47,7 @@
 
     private int Width { get => Model.ComponentRect.Width; set => Model.SetSize(Model.ComponentRect.Height, value); }
 
+    private DraggableComponentLayoutMode LayoutMode { get => Model.LayoutMode; set => Model.LayoutMode = value; }
 
     protected override void OnInitialized()
     {

@@ -1,0 +1,118 @@
+﻿@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+@using static ReportEditor.Models.DraggableComponentModel
+
+    <div>
+        @if (CellModel != null)
+        {
+            <p>Row:@CellModel.RowIndex Col:@CellModel.ColIndex</p>
+            <div>行の情報</div>
+            <input id="button-addrow-right" type="button" value="右に行追加" />
+            <input id="button-addrow-left" type="button" value="左に行追加" />
+            <input id="button-delrow" type="button" value="行削除" />
+            <table>
+                <tr>
+                    <td>高さ</td>
+                    <td><input type="text" /></td>
+                </tr>
+            </table>
+
+            <div>列の情報</div>
+            <input id="button-addcol-right" type="button" value="右に列追加" />
+            <input id="button-addcol-left" type="button" value="左に列追加" />
+            <input id="button-delcol" type="button" value="列削除" /> <table>
+                <tr>
+                    <td>幅</td>
+                    <td><input type="text" /></td>
+                </tr>
+            </table>
+
+        }
+
+        <div>子要素が表示されます</div>
+        <select class="custom-select" @onchange="OnChange">
+            @if (ExtendedModel?.Children(false) != null)
+            {
+                <option value="none">選択できます</option>
+
+                @foreach (var child in ExtendedModel?.Children(false))
+                {
+                    <option value="@child.ID">@child?.Name</option>
+                }
+            }
+        </select>
+    </div>
+
+@code {
+
+    [Parameter]
+    public DraggableComponentModel Model { get; set; }
+
+    public ContainerComponentModel ExtendedModel;
+
+    public TableComponentModel TableModel;
+
+    public TableCell CellModel;
+
+    protected override void OnInitialized()
+    {
+        _HighLightingService.HighLightChanged += HighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
+        ExtendedModel = Model as ContainerComponentModel;
+        TryGetTableModel(out TableModel, out CellModel);
+
+    }
+
+    private void OnModelPropertyChanged(string id, DraggableComponentModel model)
+    {
+        Model = model;
+        ExtendedModel = Model as ContainerComponentModel;
+        StateHasChanged();
+    }
+
+    private void HighLightChanged(object sender, EventArgs e)
+    {
+        var model = _Service.Find(_HighLightingService.HighLightingID);
+        if (model == null)
+        {
+            return;
+        }
+        Model = model;
+        ExtendedModel = Model as ContainerComponentModel;
+        TryGetTableModel(out TableModel, out CellModel);
+        StateHasChanged();
+    }
+
+
+    private void OnChange(ChangeEventArgs e)
+    {
+        _HighLightingService.HighLightingID = (string)e.Value;
+    }
+
+    private bool TryGetTableModel(out TableComponentModel tableModel, out TableCell cellModel)
+    {
+        if (ExtendedModel == null) {
+            tableModel = null;
+            cellModel = null;
+            return false;
+        }
+
+        foreach (var table in _Service.EnumAllModels().Where(model => model.ModelType == DraggableComponentModelType.Table))
+        {
+            TableCell cell;
+            TableComponentModel container = (table as TableComponentModel);
+            if (container == null) { continue; }
+
+            if (container.Contains(ExtendedModel, out cell))
+            {
+                tableModel = container;
+                cellModel = cell;
+                return true;
+            }
+        }
+
+        tableModel = null;
+        cellModel = null;
+        return false;
+    }
+}

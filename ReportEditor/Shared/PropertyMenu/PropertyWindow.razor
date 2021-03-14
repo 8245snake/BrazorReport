@@ -44,8 +44,11 @@
             case DraggableComponentModel.DraggableComponentModelType.Container:
                 <ContainerPropertyPanel Model="@Model" />
                 break;
-            default:
+
+            case DraggableComponentModel.DraggableComponentModelType.TableCell:
+                <CellPropertyPanel Model="@Model"/>
                 break;
+
         }
 
 

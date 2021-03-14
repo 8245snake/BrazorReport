@@ -73,8 +73,14 @@ namespace ReportEditor.Models
         public string Text { get; set; }
 
         public DraggableComponentModelType ModelType { get; set; }
-        public DraggableComponentLayoutMode LayoutMode { get; set; }
+        public DraggableComponentLayoutMode LayoutMode { get => _LayoutMode;
+            set {
+                _LayoutMode = value;
+                OnPropertyChanged(new EventArgs());
+            }
+        }
 
+        private DraggableComponentLayoutMode _LayoutMode = DraggableComponentLayoutMode.Relative;
 
         public Rectangle ComponentRect;
 

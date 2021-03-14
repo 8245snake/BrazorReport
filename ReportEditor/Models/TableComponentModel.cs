@@ -87,6 +87,24 @@ namespace ReportEditor.Models
                 Rows[rowIndex].Cells.Add(new TableCell(rowIndex, colIndex));
             }
         }
+
+        public bool Contains(DraggableComponentModel model, out TableCell containsCell)
+        {
+            foreach (var row in Rows)
+            {
+                foreach (var cell in row.Cells)
+                {
+                    if (cell.Model == model)
+                    {
+                        containsCell = cell;
+                        return true;
+                    }
+                }
+            }
+            containsCell = null;
+            return false;
+        }
+
         public override DraggableComponentModel Clone()
         {
             TableComponentModel clone = (TableComponentModel)base.Clone();

@@ -56,6 +56,15 @@ namespace ReportEditor.Models
             }
         }
 
+        public bool Contains(DraggableComponentModel model)
+        {
+            foreach (var item in Children(true))
+            {
+                if(item == model) { return true; }
+            }
+            return false;
+        }
+
         public override DraggableComponentModel Clone()
         {
             ContainerComponentModel clone = this.MemberwiseClone() as ContainerComponentModel;
