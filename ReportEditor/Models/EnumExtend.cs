@@ -26,6 +26,26 @@ namespace ReportEditor.Models
             return "other";
         }
 
+        public static string NameJP(this DraggableComponentModel.DraggableComponentModelType self)
+        {
+            switch (self)
+            {
+                case DraggableComponentModel.DraggableComponentModelType.TextBlock:
+                    return "テキスト";
+                case DraggableComponentModel.DraggableComponentModelType.Table:
+                    return "表";
+                case DraggableComponentModel.DraggableComponentModelType.Picture:
+                    return "画像";
+                case DraggableComponentModel.DraggableComponentModelType.Container:
+                    return "コンテナ";
+                case DraggableComponentModel.DraggableComponentModelType.TableCell:
+                    return "セル";
+            }
+
+            return "その他";
+        }
+
+
         /// <summary>
         /// 
         /// </summary>

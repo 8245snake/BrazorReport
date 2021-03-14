@@ -78,6 +78,11 @@ namespace ReportEditor.Models
 
         public Rectangle ComponentRect;
 
+        public int X { get => ComponentRect.X; }
+        public int Y { get => ComponentRect.Y; }
+        public int Height { get => ComponentRect.Height; }
+        public int Width { get => ComponentRect.Width; }
+
 
         private bool _IsHighLighting;
 

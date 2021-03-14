@@ -95,6 +95,15 @@
             // ツールボックスからドロップされたとき
             model = _DragAndDropService.Data as DraggableComponentModel;
             if (model == null) { return; }
+            // サイズ調整(親コンテナより大きくなる場合は縮小）
+            int limitHeight = (int)ExtendedModel.Height;
+            int limitWidth = (int)ExtendedModel.Width;
+            int h = (model.Height > ExtendedModel.Height) ? limitHeight : model.Height;
+            int w = (model.Width > ExtendedModel.Width) ? limitWidth : model.Width;
+            model.SetSize(h, w);
+            // 名前変更
+            int count = _Service.EnumAllModels().Where(item => item.ModelType == model.ModelType).Count();
+            model.Name = $"{model.ModelType.NameJP()}{count + 1}";
         }
         else
         {

@@ -118,5 +118,16 @@ namespace ReportEditor.Services
             return false;
         }
 
+        public IEnumerable<DraggableComponentModel> EnumAllModels()
+        {
+            foreach (var paper in _Papers)
+            {
+                foreach (var tuple in paper.EnumAllModelListPairs(true))
+                {
+                    yield return tuple.Item1;
+                }
+            }
+        }
+
     }
 }
