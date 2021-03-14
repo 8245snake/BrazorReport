@@ -13,15 +13,28 @@ namespace ReportEditor.Services
         // リストのリスト
         private List<ContainerComponentModel> _Papers = new List<ContainerComponentModel>();
 
+        public List<ContainerComponentModel> Papers { get => _Papers; }
+
         /// <summary>
         /// モデルプロパティが変化したら発火する
         /// </summary>
         public event ModelPropertyChangedEventHandler ModelPropertyChanged;
         public delegate void ModelPropertyChangedEventHandler(string sheetID, DraggableComponentModel model);
 
+
+        public delegate void PaperPropertyChangedEventHandler(ContainerComponentModel paper);
+        public event PaperPropertyChangedEventHandler PaperPropertyChanged;
+
+
+
         protected virtual void OnModelPropertyChanged(string sheetID, DraggableComponentModel model)
         {
             ModelPropertyChanged?.Invoke(sheetID, model);
+        }
+
+        protected virtual void OnPaperPropertyChanged(ContainerComponentModel paper)
+        {
+            PaperPropertyChanged?.Invoke(paper);
         }
 
         public ContainerComponentModel this[string sheetID]
@@ -52,12 +65,14 @@ namespace ReportEditor.Services
                 paper.Models.ItemPropertyChanged += OnItemPropertyChanged;
                 _Papers.Add(paper);
             }
+            OnPaperPropertyChanged(paper);
         }
 
         public void Remove(ContainerComponentModel paper)
         {
             paper.Models.ItemPropertyChanged -= OnItemPropertyChanged;
             _Papers.Remove(paper);
+            OnPaperPropertyChanged(paper);
         }
 
         public void Remove(DraggableComponentModel model)

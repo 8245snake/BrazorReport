@@ -8,9 +8,7 @@ namespace ReportEditor.Models
 {
     public class DraggableComponentModelFactory
     {
-
-
-        public DraggableComponentModel Create(string text, DraggableComponentModelType type, int defaultHeight, int defaultWidth, DraggableComponentLayoutMode layout)
+        public DraggableComponentModel Create(string text, DraggableComponentModelType type, int defaultHeight = 0, int defaultWidth = 0, DraggableComponentLayoutMode layout = DraggableComponentLayoutMode.Relative)
         {
 
             switch (type)

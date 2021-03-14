@@ -1,4 +1,6 @@
 ﻿@page "/editor"
+@inject ReportComponentService _Service
+
 
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-left" style="margin-top: 55px">
     <ToolBox />
@@ -11,12 +13,27 @@
     <TopMenu />
 </nav>
 <div class="container" style="margin-top: 100px">
-    <div class="A4">
-        <Paper/>
-    </div>
+
+    @foreach (var paper in _Service.Papers)
+    {
+        <div class="A4">
+            <Paper Model="@paper"/>
+        </div>
+    }
+
 
 </div>
 
 @code {
+
+    protected override void OnInitialized()
+    {
+        _Service.PaperPropertyChanged += OnPaperPropertyChanged;
+    }
+
+    private void OnPaperPropertyChanged(ContainerComponentModel paper)
+    {
+        StateHasChanged();
+    }
 
 }

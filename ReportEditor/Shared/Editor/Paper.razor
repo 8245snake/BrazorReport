@@ -1,6 +1,7 @@
 ﻿@inherits DroppableContainer
 @inject DragAndDropService _DragAndDropService
 @inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
 @inject ILogger<Paper> logger;
 @using Microsoft.Extensions.Logging;
 @using ReportEditor.Models;
@@ -36,14 +37,10 @@
 
 @code {
 
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-
         BaseStyleClass = "sheet padding-5mm position-relative";
-        logger.LogInformation($"OnInitialized {Model.ID}");
 
     }
 }

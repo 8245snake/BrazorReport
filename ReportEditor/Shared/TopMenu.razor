@@ -1,7 +1,83 @@
-﻿<div>
+﻿@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+@inject ILogger<TopMenu> logger;
+@using Microsoft.Extensions.Logging;
+
+
+<div>
+
+
+    <form class="form-inline">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">レイアウト名</span>
+            </div>
+            <input type="text" class="form-control">
+        </div>
+
+        <button type="button" class="btn btn-primary" @onclick="AddPage">ページ追加</button>
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary">コピー</button>
+            <button type="button" class="btn btn-primary">切り取り</button>
+            <button type="button" class="btn btn-primary">ペースト</button>
+            <button type="button" class="btn btn-primary" @onclick="DeleteComponent">削除</button>
+        </div>
+
+    </form>
+
 
 </div>
 
 @code {
+
+
+    private DraggableComponentModel Model = new DraggableComponentModel();
+
+    protected override void OnInitialized()
+    {
+        logger.LogInformation($"OnInitialized");
+        _HighLightingService.HighLightChanged += HighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
+    }
+
+    private void OnModelPropertyChanged(string id, DraggableComponentModel model)
+    {
+        logger.LogInformation($"OnModelPropertyChanged {id} {model.ID}");
+        StateHasChanged();
+    }
+
+    private void HighLightChanged(object sender, EventArgs e)
+    {
+        var model = _Service.Find(_HighLightingService.HighLightingID);
+        if (model == null)
+        {
+            return;
+        }
+        logger.LogInformation($"HighLightChanged {model.ID}");
+        Model = model;
+        StateHasChanged();
+    }
+
+    private void AddPage(MouseEventArgs e) {
+        var f = new DraggableComponentModelFactory();
+        var model = f.Create("paper", DraggableComponentModel.DraggableComponentModelType.Container);
+        _Service.Add(model as ContainerComponentModel);
+    }
+
+
+    private void DeleteComponent(MouseEventArgs e)
+    {
+        try
+        {
+            _Service.Remove(Model);
+            _HighLightingService.HighLightingID = "";
+        }
+        catch
+        {
+            logger.LogError($"{Model.Name}の削除に失敗");
+        }
+
+    }
 
 }
