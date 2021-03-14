@@ -1,27 +1,13 @@
 ﻿
 
-.textblock {
+.xrp2-text {
     cursor: grab;
     border: solid 1px #E0E0E0;
 }
 
-/* テーブルにスペースができたのでいらなくなった
-    .table:before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    width: 20px;
-    height: 20px;
-    background-color: gray;
-    z-index: 900;
-}*/
-
-.table {
+.xrp2-table {
     cursor: grab;
     border: solid 1px #E0E0E0;
-/*    border-collapse: initial !important;
-    table-layout: fixed !important;*/
 }
 
 .xrp2-row {
@@ -32,6 +18,7 @@
 }
 
 .xrp2-col {
+    overflow: hidden;
     border: solid 1px #E0E0E0;
     display: inline-block;
     vertical-align: top;
@@ -41,30 +28,18 @@
     font-size: 12px; /* フォントサイズ0になっているので指定する */
 }
 
-.cell {
-    background-color:transparent;
-    position:relative;
+.xrp2-cell {
+    overflow: hidden;
+    background-color: transparent;
+    position: relative;
 }
 
-/*.xrp2-td {
-    margin: 0px !important;
-    padding: 0px !important;
-}
 
-.xrp2-th {
-    margin: 0px !important;
-    padding: 0px !important;
-    color : white;
-    background-color:gray;
-    text-align:center;
-}*/
-
-
-.picture {
+.xrp2-picture {
     cursor: grab;
 }
 
-.group {
+.xrp2-group {
     cursor: grab;
     border: solid 1px #E0E0E0;
     overflow: hidden;

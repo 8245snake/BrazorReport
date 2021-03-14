@@ -95,11 +95,10 @@
     {
         //logger.LogInformation($"OnInitialized {Model?.ID}");
 
-        //base.OnInitialized();
         if (Model != null)
         {
             Model.PropertyChanged += OnPropertyChanged;
-            BaseStyleClass = $"{Model.ModelType.Name()} {Model.LayoutMode.PositionClass()}";
+            BaseStyleClass = $"{Model.ModelType.StyleName()} {Model.LayoutMode.PositionClass()}";
         }
 
     }

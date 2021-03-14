@@ -45,6 +45,25 @@ namespace ReportEditor.Models
             return "その他";
         }
 
+        public static string StyleName(this DraggableComponentModel.DraggableComponentModelType self)
+        {
+            switch (self)
+            {
+                case DraggableComponentModel.DraggableComponentModelType.TextBlock:
+                    return "xrp2-text";
+                case DraggableComponentModel.DraggableComponentModelType.Table:
+                    return "xrp2-table";
+                case DraggableComponentModel.DraggableComponentModelType.Picture:
+                    return "xrp2-picture";
+                case DraggableComponentModel.DraggableComponentModelType.Container:
+                    return "xrp2-group";
+                case DraggableComponentModel.DraggableComponentModelType.TableCell:
+                    return "xrp2-cell";
+            }
+
+            return "other";
+        }
+
 
         /// <summary>
         /// 

@@ -1,24 +1,24 @@
 ﻿@inject HighLightingService _HighLightingService
 @inject ReportComponentService _Service
 
-    <table>
-        <tr>
-            <td>固定テキスト</td>
-            <td><input type="text" @bind="Text" /></td>
-        </tr>
-        <tr>
-            <td>バインディング</td>
-            <td><input type="text" @bind="BindingPath" /></td>
-        </tr>
-        <tr>
-            <td>フォント</td>
-            <td><input type="text" @bind="FontName" /></td>
-        </tr>
-        <tr>
-            <td>フォントサイズ</td>
-            <td><input type="text" @bind="FontSize" /></td>
-        </tr>
-    </table>
+<table>
+    <tr>
+        <td>固定テキスト</td>
+        <td><input type="text" @bind="Text" /></td>
+    </tr>
+    <tr>
+        <td>バインディング</td>
+        <td><input type="text" @bind="BindingPath" /></td>
+    </tr>
+    <tr>
+        <td>フォント</td>
+        <td><input type="text" @bind="FontName" /></td>
+    </tr>
+    <tr>
+        <td>フォントサイズ</td>
+        <td><input type="text" @bind="FontSize" /></td>
+    </tr>
+</table>
 
 @code {
 
@@ -33,7 +33,19 @@
 
     private string FontName { get => ExtendedModel?.FontName; set => ExtendedModel.FontName = value; }
 
-    private int FontSize { get => ExtendedModel.FontSize; set => ExtendedModel.FontSize = value; }
+    private string FontSize
+    {
+        get => ExtendedModel?.FontSize.ToString();
+        set
+        {
+            if (ExtendedModel == null) { return; }
+            int size;
+            if (int.TryParse(value, out size))
+            {
+                ExtendedModel.FontSize = size;
+            }
+        }
+    }
 
 
     protected override void OnInitialized()
