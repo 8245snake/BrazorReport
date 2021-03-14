@@ -4,7 +4,7 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 
-    <div id="@Model.ID" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+    <div id="@Model.ID" draggable="@Draggable" style="@Style" class="@StyleClass"
            @ondragenter="OnDragEnter"
            @ondragenter:stopPropagation
            @ondragleave="OnDragLeave"

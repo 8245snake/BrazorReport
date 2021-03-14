@@ -5,7 +5,7 @@
 @using static ReportEditor.Models.DraggableComponentModel
 
 
-<img id="@Model.ID" src="@ExtendedModel.ImagePath" draggable="@Draggable" style="@Model.GetRectStyle()" class="@StyleClass"
+<img id="@Model.ID" src="@ExtendedModel.ImagePath" draggable="@Draggable" style="@Style" class="@StyleClass"
      @ondragenter="OnDragEnter"
      @ondragenter:stopPropagation
      @ondragleave="OnDragLeave"

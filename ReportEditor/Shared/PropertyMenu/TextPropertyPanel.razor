@@ -1,12 +1,24 @@
 ﻿@inject HighLightingService _HighLightingService
 @inject ReportComponentService _Service
 
-<table>
-    <tr>
-        <td>Text</td>
-        <td><input type="text" @bind="Text" /></td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td>固定テキスト</td>
+            <td><input type="text" @bind="Text" /></td>
+        </tr>
+        <tr>
+            <td>バインディング</td>
+            <td><input type="text" @bind="BindingPath" /></td>
+        </tr>
+        <tr>
+            <td>フォント</td>
+            <td><input type="text" @bind="FontName" /></td>
+        </tr>
+        <tr>
+            <td>フォントサイズ</td>
+            <td><input type="text" @bind="FontSize" /></td>
+        </tr>
+    </table>
 
 @code {
 
@@ -16,6 +28,12 @@
     public TextComponentModel ExtendedModel;
 
     private string Text { get => ExtendedModel?.Text; set => ExtendedModel.Text = value; }
+
+    private string BindingPath { get => ExtendedModel?.BindingPath; set => ExtendedModel.BindingPath = value; }
+
+    private string FontName { get => ExtendedModel?.FontName; set => ExtendedModel.FontName = value; }
+
+    private int FontSize { get => ExtendedModel.FontSize; set => ExtendedModel.FontSize = value; }
 
 
     protected override void OnInitialized()

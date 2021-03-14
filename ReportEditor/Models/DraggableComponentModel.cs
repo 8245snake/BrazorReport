@@ -208,12 +208,15 @@ namespace ReportEditor.Models
             {
                 return "height:100%; width:100%;";
             }
-            int x = ComponentRect.X;
-            int y = ComponentRect.Y;
-            int height = ComponentRect.Height;
-            int width = ComponentRect.Width;
+
             string unit = "px";
-            return $"height:{height}{unit}; width:{width}{unit}; left:{x}{unit}; top:{y}{unit};";
+            return $"height:{Height}{unit}; width:{Width}{unit}; {GetLocationStyle()}";
+        }
+
+        public string GetLocationStyle()
+        {
+            string unit = "px";
+            return $"left:{X}{unit}; top:{Y}{unit};";
         }
 
 

@@ -88,6 +88,9 @@
         }
     }
 
+    public virtual string Style{ get => Model?.GetRectStyle(); }
+
+
     protected override void OnInitialized()
     {
         //logger.LogInformation($"OnInitialized {Model?.ID}");
