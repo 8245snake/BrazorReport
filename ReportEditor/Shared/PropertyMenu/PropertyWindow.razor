@@ -3,7 +3,28 @@
 @inject ILogger<PropertyWindow> logger;
 @using Microsoft.Extensions.Logging;
 
-    <div >
+    <div>
+        <div>
+            <div>全要素一覧</div>
+            <select class="custom-select" @onchange="OnChange">
+                @if (_Service?.EnumAllModels() != null)
+                {
+                    <option value="none">選択できます</option>
+
+                    @foreach (var child in _Service.EnumAllModels())
+                    {
+                        @if (child.ID == _HighLightingService.HighLightingID)
+                        {
+                            <option value="@child.ID" selected>@child?.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@child.ID">@child?.Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
         <input id="button-debug" type="button" value="デバッグ用" onclick="onDebugButtonClick()" />
 
         <PropertyPanelBase Model="@Model" />
@@ -43,7 +64,7 @@
 
     private void OnModelPropertyChanged(string id, DraggableComponentModel model)
     {
-        logger.LogInformation($"OnModelPropertyChanged {id} {model.ID}");
+        //logger.LogInformation($"OnModelPropertyChanged {id} {model.ID}");
         StateHasChanged();
     }
 
@@ -57,5 +78,10 @@
         logger.LogInformation($"HighLightChanged {model.ID}");
         Model = model;
         StateHasChanged();
+    }
+
+    private void OnChange(ChangeEventArgs e)
+    {
+        _HighLightingService.HighLightingID = (string)e.Value;
     }
 }
