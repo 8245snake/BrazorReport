@@ -60,6 +60,22 @@ namespace ReportEditor.Models
             }
         }
 
+        public IEnumerable<Tuple<DraggableComponentModel, DraggableComponentModelList>> EnumAllModelListPairs(bool recursive)
+        {
+            foreach (var row in Rows)
+            {
+                foreach (var cell in row.Cells)
+                {
+                    yield return new Tuple<DraggableComponentModel, DraggableComponentModelList>(cell.Model, null);
+
+                    foreach (var item in cell.EnumAllModelListPairs(recursive))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
+
         public void AddNewColumn()
         {
             int colIndex = Cols.Count;
@@ -131,6 +147,14 @@ namespace ReportEditor.Models
             ColIndex = colIndex;
             DraggableComponentModelFactory f = new DraggableComponentModelFactory();
             Model = f.Create("cell", DraggableComponentModelType.TableCell, 100, 200, DraggableComponentLayoutMode.Cell) as ContainerComponentModel;
+        }
+
+        public IEnumerable<Tuple<DraggableComponentModel, DraggableComponentModelList>> EnumAllModelListPairs(bool recursive)
+        {
+            foreach (var item in Model.EnumAllModelListPairs(recursive))
+            {
+                yield return item;
+            }
         }
 
         public TableCell Clone()

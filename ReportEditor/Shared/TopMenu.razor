@@ -1,4 +1,5 @@
 ﻿@inject HighLightingService _HighLightingService
+@inject CopyAndPasteService _CopyAndPasteService
 @inject ReportComponentService _Service
 @inject ILogger<TopMenu> logger;
 @using Microsoft.Extensions.Logging;
@@ -18,9 +19,9 @@
         <button type="button" class="btn btn-primary" @onclick="AddPage">ページ追加</button>
 
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-primary">コピー</button>
-            <button type="button" class="btn btn-primary">切り取り</button>
-            <button type="button" class="btn btn-primary">ペースト</button>
+            <button type="button" class="btn btn-primary" @onclick="CopyComponent">コピー</button>
+            <button type="button" class="btn btn-primary" @onclick="CutComponent">切り取り</button>
+            <button type="button" class="btn btn-primary" @onclick="PasteComponent">ペースト</button>
             <button type="button" class="btn btn-primary" @onclick="DeleteComponent">削除</button>
         </div>
 
@@ -76,6 +77,35 @@
         catch
         {
             logger.LogError($"{Model.Name}の削除に失敗");
+        }
+
+    }
+
+    private void CopyComponent(MouseEventArgs e)
+    {
+        _CopyAndPasteService.CopySource = Model;
+    }
+
+
+    private void CutComponent(MouseEventArgs e)
+    {
+        _CopyAndPasteService.CopySource = Model.Clone();
+        DeleteComponent(e);
+    }
+
+
+    private void PasteComponent(MouseEventArgs e)
+    {
+        var clone = _CopyAndPasteService?.CopySource?.Clone();
+        if (clone == null) { return; }
+
+        logger.LogInformation($"ModelType={Model.GetType().Name}");
+
+        if (Model is ContainerComponentModel)
+        {
+            ContainerComponentModel container = Model as ContainerComponentModel;
+            clone.SetLocation(0, 0);
+            container.Models.Add(clone);
         }
 
     }

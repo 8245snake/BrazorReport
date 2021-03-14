@@ -43,6 +43,15 @@ namespace ReportEditor.Models
                             yield return child;
                         }
                     }
+
+                    TableComponentModel tabeModel = item as TableComponentModel;
+                    if (tabeModel != null)
+                    {
+                        foreach (var child in tabeModel.EnumAllModelListPairs(recursive))
+                        {
+                            yield return child;
+                        }
+                    }
                 }
             }
         }

@@ -20,6 +20,7 @@ namespace ReportEditor
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton<DragAndDropService>();
+            builder.Services.AddSingleton<CopyAndPasteService>();
             builder.Services.AddSingleton<HighLightingService>();
             builder.Services.AddSingleton<ReportComponentService>();
 
