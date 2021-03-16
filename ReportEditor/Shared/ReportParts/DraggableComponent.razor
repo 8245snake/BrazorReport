@@ -55,8 +55,10 @@
         set
         {
             Model.IsHighLighting = value;
-            if (value) { _HighLightingService.HighLightingID = Model.ID; }
-            //StateHasChanged();
+            if (value)
+            {
+                _HighLightingService.HighLightingID = Model.ID;
+            }
         }
     }
 
@@ -73,7 +75,6 @@
     }
 
     public string Draggable { get => (Model.IsDraggable) ? "true" : "false"; }
-    //public bool IsDragging = false;
 
     protected string BaseStyleClass;
 
@@ -97,31 +98,23 @@
 
         if (Model != null)
         {
-            Model.PropertyChanged += OnPropertyChanged;
             BaseStyleClass = $"{Model.ModelType.StyleName()} {Model.LayoutMode.PositionClass()}";
         }
-
+        _HighLightingService.HighLightChanged += OnHighLightChanged;
     }
 
-    private void OnPropertyChanged(DraggableComponentModel model)
+
+    protected void OnHighLightChanged(object sender, EventArgs e)
     {
-        //logger.LogInformation("OnPropertyChanged");
+        // ハイライト状態を更新
+        Model.IsHighLighting = Model.ID == _HighLightingService.HighLightingID;
         StateHasChanged();
     }
 
-    protected virtual void OnDragEnter()
-    {
-        //logger.LogInformation("OnDragEnter");
-        //IsDragging = true;
-    }
+    protected virtual void OnDragEnter(DragEventArgs e) { }
 
 
-
-    protected virtual void OnDragLeave(DragEventArgs e)
-    {
-        //logger.LogInformation("OnDragLeave");
-        //IsDragging = false;
-    }
+    protected virtual void OnDragLeave(DragEventArgs e) { }
 
     protected virtual void OnDragStart(DragEventArgs e)
     {
@@ -130,10 +123,7 @@
         _DragAndDropService.Data = Model.Clone();
     }
 
-    protected virtual void OnMouseOver(MouseEventArgs e)
-    {
-
-    }
+    protected virtual void OnMouseOver(MouseEventArgs e) { }
 
     protected virtual void OnClick(MouseEventArgs e)
     {

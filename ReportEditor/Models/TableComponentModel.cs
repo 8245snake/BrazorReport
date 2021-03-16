@@ -29,7 +29,7 @@ namespace ReportEditor.Models
             UpdateCellsLoaction();
         }
 
-        public void AddNewRow()
+        public void AddNewRow(int index = -1)
         {
             int rowIndex = Rows.Count;
             TableRow row = new TableRow(rowIndex);
@@ -40,8 +40,71 @@ namespace ReportEditor.Models
                 row.Cells.Add(cell);
             }
 
-            Rows.Add(row);
+            if (index == -1)
+            {
+                Rows.Add(row);
+            }
+            else
+            {
+                Rows.Insert(index, row);
+            }
+
+            UpdateCellsLoaction();
+            UpdateIndex();
+            OnPropertyChanged(new EventArgs());
         }
+
+        public void DeleteRow(int index)
+        {
+            Rows.RemoveAt(index);
+            UpdateCellsLoaction();
+            UpdateIndex();
+            OnPropertyChanged(new EventArgs());
+        }
+
+
+        public void AddNewColumn(int index = -1)
+        {
+            int colIndex = Cols.Count;
+            TableColumn col = new TableColumn(colIndex, $"列{colIndex}");
+            if (index == -1)
+            {
+                Cols.Add(col);
+            }
+            else
+            {
+                Cols.Insert(index, col);
+            }
+
+            for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
+            {
+                if (index == -1)
+                {
+                    Rows[rowIndex].Cells.Add(new TableCell(rowIndex, colIndex));
+                }
+                else
+                {
+                    Rows[rowIndex].Cells.Insert(index, new TableCell(rowIndex, colIndex));
+                }
+
+            }
+            UpdateCellsLoaction();
+            UpdateIndex();
+            OnPropertyChanged(new EventArgs());
+        }
+
+        public void DeleteCol(int index)
+        {
+            Cols.RemoveAt(index);
+            foreach (var row in Rows)
+            {
+                row.Cells.RemoveAt(index);
+            }
+            UpdateCellsLoaction();
+            UpdateIndex();
+            OnPropertyChanged(new EventArgs());
+        }
+
 
         public void UpdateCellsLoaction()
         {
@@ -57,6 +120,20 @@ namespace ReportEditor.Models
                 }
                 x = 0;
                 y += Rows[rowIndex].RowHeight;
+            }
+        }
+
+        public void UpdateIndex()
+        {
+            for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
+            {
+                Rows[rowIndex].RowIndex = rowIndex;
+
+                for (int colIndex = 0; colIndex < Cols.Count; colIndex++)
+                {
+                    Rows[rowIndex].Cells[colIndex].RowIndex = rowIndex;
+                    Rows[rowIndex].Cells[colIndex].ColIndex = colIndex;
+                }
             }
         }
 
@@ -76,17 +153,7 @@ namespace ReportEditor.Models
             }
         }
 
-        public void AddNewColumn()
-        {
-            int colIndex = Cols.Count;
-            TableColumn col = new TableColumn(colIndex, $"列{colIndex}");
-            Cols.Add(col);
 
-            for (int rowIndex = 0; rowIndex < Rows.Count; rowIndex++)
-            {
-                Rows[rowIndex].Cells.Add(new TableCell(rowIndex, colIndex));
-            }
-        }
 
         public bool Contains(DraggableComponentModel model, out TableCell containsCell)
         {
@@ -117,7 +184,7 @@ namespace ReportEditor.Models
     public class TableRow
     {
         public int RowIndex;
-        public int RowHeight = 100;
+        public int RowHeight = 50;
         public List<TableCell> Cells = new List<TableCell>();
 
         public TableRow(int index)
@@ -136,7 +203,7 @@ namespace ReportEditor.Models
     public class TableColumn
     {
         public int ColIndex;
-        public int ColWidth = 200;
+        public int ColWidth = 100;
         public string Text;
 
         public TableColumn(int index , string text)

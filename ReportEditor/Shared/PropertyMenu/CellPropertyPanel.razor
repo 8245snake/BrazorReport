@@ -7,9 +7,9 @@
         {
             <p>Row:@CellModel.RowIndex Col:@CellModel.ColIndex</p>
             <div>行の情報</div>
-            <input id="button-addrow-right" type="button" value="右に行追加" />
-            <input id="button-addrow-left" type="button" value="左に行追加" />
-            <input id="button-delrow" type="button" value="行削除" />
+            <input id="button-addrow-right" type="button" value="上に行追加" @onclick="AddRowUp" />
+            <input id="button-addrow-left" type="button" value="下に行追加" @onclick="AddRowDown" />
+            <input id="button-delrow" type="button" value="行削除" @onclick="DeleteRow" />
             <table>
                 <tr>
                     <td>高さ</td>
@@ -18,9 +18,10 @@
             </table>
 
             <div>列の情報</div>
-            <input id="button-addcol-right" type="button" value="右に列追加" />
-            <input id="button-addcol-left" type="button" value="左に列追加" />
-            <input id="button-delcol" type="button" value="列削除" /> <table>
+            <input id="button-addcol-left" type="button" value="左に列追加" @onclick="AddColLeft" />
+            <input id="button-addcol-right" type="button" value="右に列追加" @onclick="AddColRight" />
+            <input id="button-delcol" type="button" value="列削除" @onclick="DeleteCol" />
+            <table>
                 <tr>
                     <td>幅</td>
                     <td><input type="text" /></td>
@@ -114,5 +115,36 @@
         tableModel = null;
         cellModel = null;
         return false;
+    }
+
+
+    private void AddRowUp(MouseEventArgs e)
+    {
+        TableModel.AddNewRow(CellModel.RowIndex - 1);
+    }
+
+    private void AddRowDown(MouseEventArgs e)
+    {
+        TableModel.AddNewRow(CellModel.RowIndex + 1);
+    }
+
+    private void DeleteRow(MouseEventArgs e)
+    {
+        TableModel.DeleteRow(CellModel.RowIndex);
+    }
+
+    private void AddColRight(MouseEventArgs e)
+    {
+        TableModel.AddNewColumn(CellModel.ColIndex + 1);
+    }
+
+    private void AddColLeft(MouseEventArgs e)
+    {
+        TableModel.AddNewColumn(CellModel.ColIndex - 1);
+    }
+
+    private void DeleteCol(MouseEventArgs e)
+    {
+        TableModel.DeleteCol(CellModel.ColIndex);
     }
 }

@@ -56,7 +56,6 @@
 
         ExtendedModel = Model as ContainerComponentModel;
         ExtendedModel.Models.ContainerID = Model.ID;
-        _HighLightingService.HighLightChanged += OnHighLightChanged;
         _Service.ModelPropertyChanged += OnModelPropertyChanged;
 
     }
@@ -65,17 +64,6 @@
     {
         // モデルに変更があればビューを更新
         StateHasChanged();
-    }
-
-    protected void OnHighLightChanged(object sender, EventArgs e)
-    {
-        // ハイライト状態を更新
-        Model.IsHighLighting = Model.ID == _HighLightingService.HighLightingID;
-
-        foreach (var model in ExtendedModel.Models)
-        {
-            model.IsHighLighting = model.ID == _HighLightingService.HighLightingID;
-        }
     }
 
 
@@ -231,9 +219,6 @@
 
     }
 
-    protected void OnDragOver(DragEventArgs e)
-    {
-        //getComponents();
-    }
+    protected void OnDragOver(DragEventArgs e) { }
 
 }
