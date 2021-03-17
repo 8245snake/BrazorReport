@@ -7,11 +7,24 @@ namespace ReportEditor.Models
 {
     public class TextComponentModel : DraggableComponentModel
     {
-        public string BindingPath { get; set; } = "";
+        private string _BindingPath = "";
+        private int _FontSize = 14;
+
+        public string BindingPath { get => _BindingPath; set => _BindingPath = value; }
+
 
         public string FontName { get; set; } = "ＭＳ ゴシック";
 
-        public int FontSize { get; set; } = 14;
+
+        public int FontSize
+        {
+            get => _FontSize;
+            set
+            {
+                _FontSize = value;
+                OnPropertyChanged(new EventArgs());
+            }
+        }
 
         public string FontStyle
         {

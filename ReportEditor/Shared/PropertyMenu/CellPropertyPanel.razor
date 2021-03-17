@@ -120,12 +120,12 @@
 
     private void AddRowUp(MouseEventArgs e)
     {
-        TableModel.AddNewRow(CellModel.RowIndex - 1);
+        TableModel.AddNewRow();
     }
 
     private void AddRowDown(MouseEventArgs e)
     {
-        TableModel.AddNewRow(CellModel.RowIndex + 1);
+        TableModel.AddNewRow();
     }
 
     private void DeleteRow(MouseEventArgs e)
@@ -135,12 +135,12 @@
 
     private void AddColRight(MouseEventArgs e)
     {
-        TableModel.AddNewColumn(CellModel.ColIndex + 1);
+        TableModel.AddNewColumn();
     }
 
     private void AddColLeft(MouseEventArgs e)
     {
-        TableModel.AddNewColumn(CellModel.ColIndex - 1);
+        TableModel.AddNewColumn();
     }
 
     private void DeleteCol(MouseEventArgs e)

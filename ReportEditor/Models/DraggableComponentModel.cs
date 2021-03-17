@@ -70,11 +70,23 @@ namespace ReportEditor.Models
         }
 
 
-        public string Text { get; set; }
+        private string _Text;
+        public string Text
+        {
+            get => _Text;
+            set
+            {
+                _Text = value;
+                OnPropertyChanged(new EventArgs());
+            }
+        }
 
         public DraggableComponentModelType ModelType { get; set; }
-        public DraggableComponentLayoutMode LayoutMode { get => _LayoutMode;
-            set {
+        public DraggableComponentLayoutMode LayoutMode
+        {
+            get => _LayoutMode;
+            set
+            {
                 _LayoutMode = value;
                 OnPropertyChanged(new EventArgs());
             }
@@ -100,7 +112,7 @@ namespace ReportEditor.Models
                 if (_IsHighLighting != value)
                 {
                     _IsHighLighting = value;
-                    OnPropertyChanged(new EventArgs());
+                    //OnPropertyChanged(new EventArgs());
                 }
 
             }
@@ -126,7 +138,8 @@ namespace ReportEditor.Models
         public double GrabbingShiftY { get; set; }
         public bool IsDraggable
         {
-            get {
+            get
+            {
                 if (LayoutMode != DraggableComponentLayoutMode.Stack)
                 {
                     // いまのところスタックタイプのみドラッグ可能

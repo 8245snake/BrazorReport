@@ -10,8 +10,23 @@ namespace ReportEditor.Models
     {
         public List<TableRow> Rows = new List<TableRow>();
         public List<TableColumn> Cols = new List<TableColumn>();
-        public int HeaderRowHeight = 50;
-        
+
+        private int _AllCellHeight = 50;
+
+        public int AllCellHeight
+        {
+            get => _AllCellHeight;
+            set
+            {
+                _AllCellHeight = value;
+                foreach (var row in Rows)
+                {
+                    row.RowHeight = value;
+                }
+                OnPropertyChanged(new EventArgs());
+            }
+        }
+
         public TableComponentModel(string text, DraggableComponentModelType type, int defaultHeight, int defaultWidth, DraggableComponentLayoutMode layout) : base(text, type, defaultHeight, defaultWidth, layout)
         {
             int initialRowCount = 2;
@@ -32,7 +47,7 @@ namespace ReportEditor.Models
         public void AddNewRow(int index = -1)
         {
             int rowIndex = Rows.Count;
-            TableRow row = new TableRow(rowIndex);
+            TableRow row = new TableRow(rowIndex, _AllCellHeight);
 
             for (int colIndex = 0; colIndex < Cols.Count; colIndex++)
             {
@@ -177,24 +192,25 @@ namespace ReportEditor.Models
             TableComponentModel clone = (TableComponentModel)base.Clone();
             clone.Rows = new List<TableRow>(Rows.Select(row => row.Clone()));
             clone.Cols = new List<TableColumn>(Cols.Select(col => col.Clone()));
-            clone.HeaderRowHeight = HeaderRowHeight;
+            clone.AllCellHeight = AllCellHeight;
             return clone;
         }
     }
     public class TableRow
     {
         public int RowIndex;
-        public int RowHeight = 50;
+        public int RowHeight { get; set; }
+
         public List<TableCell> Cells = new List<TableCell>();
 
-        public TableRow(int index)
+        public TableRow(int index, int height = 50)
         {
             RowIndex = index;
+            RowHeight = height;
         }
         public TableRow Clone()
         {
-            var clone = new TableRow(RowIndex);
-            clone.RowHeight = RowHeight;
+            var clone = new TableRow(RowIndex, RowHeight);
             clone.Cells = new List<TableCell>(Cells.Select(cell => cell.Clone()));
             return clone;
         }
@@ -232,6 +248,7 @@ namespace ReportEditor.Models
             ColIndex = colIndex;
             DraggableComponentModelFactory f = new DraggableComponentModelFactory();
             Model = f.Create("cell", DraggableComponentModelType.TableCell, 100, 200, DraggableComponentLayoutMode.Cell) as ContainerComponentModel;
+            Model.Models.Add(f.Create("セル", DraggableComponentModelType.TextBlock));
         }
 
         public IEnumerable<Tuple<DraggableComponentModel, DraggableComponentModelList>> EnumAllModelListPairs(bool recursive)
