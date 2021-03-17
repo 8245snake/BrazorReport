@@ -1,0 +1,78 @@
+﻿@inject HighLightingService _HighLightingService
+@inject ReportComponentService _Service
+
+    <div>
+        <div>子要素が表示されます</div>
+        <select class="custom-select" @onchange="OnChange">
+            @if (ExtendedModel?.EnumAllModelListPairs(true) != null)
+            {
+                <option value="none">選択できます</option>
+
+                @foreach (var child in ExtendedModel?.EnumAllModelListPairs(false))
+                {
+                    <option value="@child.Item1.ID">@child.Item1.Name</option>
+                }
+            }
+        </select>
+        <table>
+            <tr>
+                <td>セルの高さ</td>
+                <td><input type="text" @bind="AllCellHeight" /></td>
+            </tr>
+        </table>
+    </div>
+
+@code {
+
+    [Parameter]
+    public DraggableComponentModel Model { get; set; }
+
+    public TableComponentModel ExtendedModel;
+
+    private int AllCellHeight
+    {
+        get
+        {
+            if (ExtendedModel == null) { return 0; }
+            return ExtendedModel.AllCellHeight;
+        }
+        set
+        {
+            if (ExtendedModel == null) { return; }
+            ExtendedModel.AllCellHeight = value;
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        _HighLightingService.HighLightChanged += HighLightChanged;
+        _Service.ModelPropertyChanged += OnModelPropertyChanged;
+        ExtendedModel = Model as TableComponentModel;
+    }
+
+    private void OnModelPropertyChanged(string id, DraggableComponentModel model)
+    {
+        Model = model;
+        ExtendedModel = Model as TableComponentModel;
+        StateHasChanged();
+    }
+
+    private void HighLightChanged(object sender, EventArgs e)
+    {
+        var model = _Service.Find(_HighLightingService.HighLightingID);
+        if (model == null)
+        {
+            return;
+        }
+        Model = model;
+        ExtendedModel = Model as TableComponentModel;
+        StateHasChanged();
+    }
+
+
+    private void OnChange(ChangeEventArgs e)
+    {
+        _HighLightingService.HighLightingID = (string)e.Value;
+    }
+}

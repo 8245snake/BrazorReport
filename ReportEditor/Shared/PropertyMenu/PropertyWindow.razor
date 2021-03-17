@@ -2,16 +2,18 @@
 @inject ReportComponentService _Service
 @inject ILogger<PropertyWindow> logger;
 @using Microsoft.Extensions.Logging;
+@using static ReportEditor.Models.DraggableComponentModel
 
     <div>
         <div>
             <div>全要素一覧</div>
             <select class="custom-select" @onchange="OnChange">
-                @if (_Service?.EnumAllModels() != null)
+
+                @if (_Service?.EnumAllModels()?.Where(model => model.ModelType != DraggableComponentModelType.TableCell) != null)
                 {
                     <option value="none">選択できます</option>
 
-                    @foreach (var child in _Service.EnumAllModels())
+                    @foreach (var child in _Service.EnumAllModels().Where(model => model.ModelType != DraggableComponentModelType.TableCell))
                     {
                         @if (child.ID == _HighLightingService.HighLightingID)
                         {
@@ -35,8 +37,7 @@
                 <TextPropertyPanel Model="@Model" />
 
                 break;
-            case DraggableComponentModel.DraggableComponentModelType.Table:
-                break;
+
             case DraggableComponentModel.DraggableComponentModelType.Picture:
                 <PicturePropertyPanel Model="@Model" />
 
@@ -45,8 +46,12 @@
                 <ContainerPropertyPanel Model="@Model" />
                 break;
 
+            case DraggableComponentModel.DraggableComponentModelType.Table:
+                <TablePropertyPanel Model="@Model" />
+                break;
+
             case DraggableComponentModel.DraggableComponentModelType.TableCell:
-                <CellPropertyPanel Model="@Model"/>
+                <CellPropertyPanel Model="@Model" />
                 break;
 
         }
